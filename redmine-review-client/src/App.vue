@@ -165,7 +165,7 @@ button {
   display:inline-block;
   padding:0.35em 1.2em;
   border: none;
-  margin: 5px;
+  margin-top: 5px;
   border-radius:0.12em;
   box-sizing: border-box;
   text-decoration:none;
