@@ -1,5 +1,4 @@
 <template>
-  <h1 class="fade">Redmine yearly review</h1>
   <form @submit.prevent="getUser">
     <img :src='require(`../assets/stats.svg`)'>
     <div class="form-container">
@@ -101,13 +100,14 @@ img {
   z-index: 1;
   bottom: 30px;
   font-size: 17px;
-  background-color: #FF4D4F;
+  background-color: #e76f51;
 }
 
 .active {
   visibility: visible;
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  z-index: 5;
 }
 
 </style>

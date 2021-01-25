@@ -1,15 +1,35 @@
 <template>
+  <header>
+    <a v-if="issueCount > 0" href="#szamok">Számok</a>
+    <img :src='require(`../public/tigra.png`)'>
+  </header>
+  <h1 class="fade">Redmine éves áttekintés</h1>
   <Login v-if="!loggedInUser" @userLoad="userData" />
-  <article  v-else>
+  <article  v-else id="card">
     <div class="circle">
       {{ (loggedInUser.firstname)[0] }}  {{ (loggedInUser.lastname)[0] }}
     </div>
-    <span>🦄 Name: {{ loggedInUser.firstname }} {{ loggedInUser.laststname }}</span>
-    <span>🦄 Created: {{ (loggedInUser.created_on).split('T')[0] }}</span>
-    <span>🦄 Issues: {{ issues.length }}</span>
-    <button v-on:click="getIssues">Generate Report!</button>
-    
+    <span>🦄 Név: {{ loggedInUser.firstname + " " + loggedInUser.lastname }}</span>
+    <p>Ha megfelelő a név akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz hogy megkapd az éves áttekintésed 🚀</p>
+    <button v-on:click="getIssues" >Áttekintés elkészítése!</button>
   </article>
+  <section class="numbers" id="szamok" v-if="issueCount > 0">
+    <h2>2020-ban összesen {{issueCount}} jeggyel foglalkoztál! 🏆</h2>
+    <div class="numbers-container">
+      <div>
+        <h3>{{ Math.ceil(issueCount /  254)}} 🏁</h3>
+          issue naponta
+      </div>
+      <div>
+        <h3>{{ Math.ceil(issueCount /  52) }} 🏁</h3>
+          issue hetente
+      </div>
+      <div>
+        <h3>{{ Math.ceil(issueCount /  12) }} 🏁</h3>
+        issue havonta
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -97,6 +117,7 @@ export default {
 
     return {
       loggedInUser,
+      issueCount,
       issues,
       getIssues,
       userData
@@ -108,6 +129,7 @@ export default {
 
 
 <style>
+
 html, 
 body {
     margin: 0;
@@ -123,28 +145,99 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
 }
 
+header {
+  z-index: 4;
+  width: 100%;
+  height: 50px;
+  position: sticky;
+  top: 0;
+  background-color: #A0CED9;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
+header > img {
+  position: absolute;
+  right: 10px;
+  height: 50%;
+  margin-top: 0px;
+}
+
+header > a {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+  height: 100%;
+  color: black;
+  text-decoration: none;
+  font-size: 27px;
+  transition: 0.5s;
+}
+
+header > a:hover {
+  background-color: #1D4049;
+  color: white;
+}
 
 article {
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  padding: 5px;
   align-items: center;
   width: 300px;
   height: 350px;
   background: white;
   border-radius: 3px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
+  transition: 1s;
 }
 
 /* On mouse-over, add a deeper shadow */
 article:hover {
   box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
+}
+
+.numbers {
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0px 25px 25px 25px;
+  align-items: center;
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  transition: 1s;
+}
+
+.numbers-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  height: 120px;
+}
+
+.numbers-container > div {
+  transition: 1s;
+}
+
+.numbers-container > div:hover {
+  font-size: 20px;
+  background-color: #1D4049;
+  color: white;
+  border-radius: 3px;
+  padding: 5px;
 }
 
 .circle {
@@ -164,9 +257,10 @@ button {
   cursor: pointer;
   display:inline-block;
   padding:0.35em 1.2em;
+  height: 30px;
   border: none;
   margin-top: 5px;
-  border-radius:0.12em;
+  border-radius: 3px;
   box-sizing: border-box;
   text-decoration:none;
   font-family:'Roboto',sans-serif;
