@@ -1,10 +1,10 @@
 <template>
-  <section class="authors">
-    <h2>Ki hozta létre a jegyet amivel foglalkoztál? 🔍</h2>
-    <div class="authors-container">
+  <section class="projects">
+    <h2>Melyik projekten dolgoztál? 💻</h2>
+    <div class="projects-container">
       <apexchart
-      width="400"
-      type="pie"
+      width="520"
+      type="donut"
       :options="chartOptions"
       :series="series"
     ></apexchart>
@@ -21,18 +21,18 @@ export default {
     apexchart: VueApexCharts,
   },
   props: {
-    authorsCounts: Object
+    projectCounts: Object
   },
   setup(props) {
-    const authorNumbers = ref(props.authorsCounts)
+    const projectNumbers = ref(props.projectCounts)
 
     const chartOptions = {
-      labels: Object.keys(authorNumbers.value)
+      labels: Object.keys(projectNumbers.value)
     }
-    const series = Object.values(authorNumbers.value)
+    const series = Object.values(projectNumbers.value)
 
     return {
-      authorNumbers,
+      projectNumbers,
       chartOptions,
       series
     }
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style>
-.authors {
+.projects {
   margin: auto;
   margin-top: 25px;
   margin-bottom: 25px;
@@ -56,7 +56,7 @@ export default {
   transition: 1s;
 }
 
-.authors-container {
+.projects-container {
   display: flex;
   width: 100%;
   justify-content: space-around;
@@ -64,7 +64,7 @@ export default {
   height: 220px;
 }
 
-.authors-container > div {
+.projects-container > div {
   transition: 1s;
 }
 

@@ -1,7 +1,8 @@
 <template>
   <header>
-    <a v-if="issueCount > 0" href="#szamok">Számok</a>
-    <a v-if="authorsCounts" href="#szerzok">Szerzők</a>
+    <a v-if="issueCount > 0" href="#1">Számok</a>
+    <a v-if="authorsCounts" href="#2">Szerzők</a>
+    <a v-if="projectCounts" href="#3">Projektek</a>
     <img :src='require(`../public/tigra.png`)'>
   </header>
   <h1 class="fade">Redmine éves áttekintés</h1>
@@ -15,8 +16,9 @@
     <button v-on:click="getIssues" >Áttekintés elkészítése!</button>
   </article>
   <hr  v-if="issueCount">
-  <Numbers v-if="issueCount" v-bind:issueCount="issueCount"/> 
-  <Authors v-if="authorsCounts" v-bind:authorsCounts="authorsCounts"/>
+  <Numbers id="1" v-if="issueCount" v-bind:issueCount="issueCount"/> 
+  <Authors id="2" v-if="authorsCounts" v-bind:authorsCounts="authorsCounts"/>
+  <Projects id="3" v-if="projectCounts" v-bind:projectCounts="projectCounts"/>
 </template>
 
 <script>
@@ -24,6 +26,7 @@ import RedmineService from '@/services/RedmineService.js'
 import Authors from './components/Authors.vue'
 import Numbers from './components/Numbers.vue'
 import Login from './components/Login.vue'
+import Projects from './components/Projects.vue'
 import { ref } from 'vue'
  
 export default {
@@ -31,7 +34,8 @@ export default {
   components: {
     Login,
     Numbers,
-    Authors
+    Authors,
+    Projects
   },
 
   setup () {
@@ -174,13 +178,13 @@ header > img {
 header > a {
   display: flex;
   align-items: center;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
   height: 100%;
   color: black;
   text-decoration: none;
-  font-size: 27px;
-  transition: 0.5s;
+  font-size: 20px;
+  transition: 1s;
 }
 
 header > a:hover {

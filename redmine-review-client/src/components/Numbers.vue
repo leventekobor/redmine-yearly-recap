@@ -1,5 +1,5 @@
 <template>
-  <section class="numbers" id="szamok">
+  <section class="numbers">
     <h2>2020-ban összesen {{issueNumbers}} jeggyel foglalkoztál! 🏆</h2>
     <div class="numbers-container">
       <div>
