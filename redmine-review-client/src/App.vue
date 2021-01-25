@@ -13,34 +13,20 @@
     <p>Ha megfelelő a név akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz hogy megkapd az éves áttekintésed 🚀</p>
     <button v-on:click="getIssues" >Áttekintés elkészítése!</button>
   </article>
-  <section class="numbers" id="szamok" v-if="issueCount > 0">
-    <h2>2020-ban összesen {{issueCount}} jeggyel foglalkoztál! 🏆</h2>
-    <div class="numbers-container">
-      <div>
-        <h3>{{ Math.ceil(issueCount /  254)}} 🏁</h3>
-          issue naponta
-      </div>
-      <div>
-        <h3>{{ Math.ceil(issueCount /  52) }} 🏁</h3>
-          issue hetente
-      </div>
-      <div>
-        <h3>{{ Math.ceil(issueCount /  12) }} 🏁</h3>
-        issue havonta
-      </div>
-    </div>
-  </section>
+  <Numbers v-if="issueCount" v-bind:issueCount="issueCount"/> 
 </template>
 
 <script>
 import RedmineService from '@/services/RedmineService.js'
+import Numbers from './components/Numbers.vue'
 import Login from './components/Login.vue'
 import { ref } from 'vue'
  
 export default {
   name: 'app',
   components: {
-    Login
+    Login,
+    Numbers
   },
 
   setup () {
@@ -200,44 +186,8 @@ article {
   transition: 1s;
 }
 
-/* On mouse-over, add a deeper shadow */
 article:hover {
   box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
-}
-
-.numbers {
-  margin: auto;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: 0px 25px 25px 25px;
-  align-items: center;
-  background: white;
-  border-radius: 3px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  transition: 1s;
-}
-
-.numbers-container {
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  align-items: center;
-  height: 120px;
-}
-
-.numbers-container > div {
-  transition: 1s;
-}
-
-.numbers-container > div:hover {
-  font-size: 20px;
-  background-color: #1D4049;
-  color: white;
-  border-radius: 3px;
-  padding: 5px;
 }
 
 .circle {
@@ -275,7 +225,4 @@ button:hover{
   color:#FFF;
   background-color:#2b9348;
 }
-
-
-
 </style>
