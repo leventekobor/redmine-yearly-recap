@@ -1,6 +1,7 @@
 <template>
   <header>
     <a v-if="issueCount > 0" href="#szamok">Számok</a>
+    <a v-if="authorsCounts" href="#szerzok">Szerzők</a>
     <img :src='require(`../public/tigra.png`)'>
   </header>
   <h1 class="fade">Redmine éves áttekintés</h1>
@@ -13,11 +14,14 @@
     <p>Ha megfelelő a név akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz hogy megkapd az éves áttekintésed 🚀</p>
     <button v-on:click="getIssues" >Áttekintés elkészítése!</button>
   </article>
+  <hr  v-if="issueCount">
   <Numbers v-if="issueCount" v-bind:issueCount="issueCount"/> 
+  <Authors v-if="authorsCounts" v-bind:authorsCounts="authorsCounts"/>
 </template>
 
 <script>
 import RedmineService from '@/services/RedmineService.js'
+import Authors from './components/Authors.vue'
 import Numbers from './components/Numbers.vue'
 import Login from './components/Login.vue'
 import { ref } from 'vue'
@@ -26,7 +30,8 @@ export default {
   name: 'app',
   components: {
     Login,
-    Numbers
+    Numbers,
+    Authors
   },
 
   setup () {
@@ -35,13 +40,13 @@ export default {
     let response = ref()
     let issueCount = ref()
     let projects
-    let projectCounts
+    let projectCounts = ref()
     let authors
-    let authorsCounts
+    let authorsCounts = ref()
     let days
-    let daysCounts
+    let daysCounts = ref()
     let priority
-    let priorityCounts
+    let priorityCounts = ref()
 
     Date.prototype.getWeek = function() {
       const onejan = new Date(this.getFullYear(),0,1);
@@ -68,37 +73,36 @@ export default {
 
       // projects aggregation 
       projects = issues.value.map(issue => issue.project.name)
-      projectCounts = projects.reduce((acc, value) => ({
+      projectCounts.value = projects.reduce((acc, value) => ({
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      console.log(projectCounts)
+      //console.log(projectCounts)
 
       // authors aggregation
       authors = issues.value.map(issue => issue.author.name)
-      authorsCounts = authors.reduce((acc, value) => ({
+      authorsCounts.value = authors.reduce((acc, value) => ({
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      console.log(authorsCounts)
+      console.log(authorsCounts.value)
 
       // days aggregation
       // new Date(issue.updated_on).toLocaleString('hu-HU', {weekday:'long'})
       days = issues.value.map(issue => new Date(issue.updated_on).toLocaleString('en-us', {weekday:'long'}))
-      console.log(days)
-      daysCounts = days.reduce((acc, value) => ({
+      daysCounts.value = days.reduce((acc, value) => ({
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      console.log(daysCounts)
+      //console.log(daysCounts)
 
       // prios aggregation
       priority = issues.value.map(issue => issue.priority.name)
-      priorityCounts = priority.reduce((acc, value) => ({
+      priorityCounts.value = priority.reduce((acc, value) => ({
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      console.log(priorityCounts)
+      //console.log(priorityCounts)
     }
 
     return {
@@ -106,6 +110,10 @@ export default {
       issueCount,
       issues,
       getIssues,
+      authorsCounts,
+      projectCounts,
+      daysCounts,
+      priorityCounts,
       userData
     }
   }
@@ -121,6 +129,15 @@ body {
     margin: 0;
     padding: 0;
     background-color: #FFF2EB;
+    scroll-behavior: smooth;
+}
+
+hr {
+  color: black;
+  z-index: 3;
+  margin: 60px 10px 60px 10px;
+
+  
 }
 
 #app {
