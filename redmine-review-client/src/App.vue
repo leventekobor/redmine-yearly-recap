@@ -1,10 +1,10 @@
 <template>
   <header>
-    <a v-if="issueCount > 0" href="#1">Számok</a>
-    <a v-if="authorsCounts" href="#2">Szerzők</a>
-    <a v-if="daysCounts" href="#3">Napok</a>
-    <a v-if="projectCounts" href="#4">Projektek</a>
-    <a v-if="priorityCounts" href="#4">Prioritás</a>
+    <a v-if="issueCount > 0" href="#szamok">Számok</a>
+    <a v-if="authorsCounts" href="#szerzok">Szerzők</a>
+    <a v-if="daysCounts" href="#napok">Napok</a>
+    <a v-if="projectCounts" href="#projectek">Projektek</a>
+    <a v-if="priorityCounts" href="#prioritasok">Prioritás</a>
     <img :src='require(`../public/tigra.png`)'>
   </header>
   <h1 class="fade">Redmine éves áttekintés</h1>
@@ -15,14 +15,26 @@
     </div>
     <span>🦄 Név: {{ loggedInUser.firstname + " " + loggedInUser.lastname }}</span>
     <p>Ha megfelelő a név akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz hogy megkapd az éves áttekintésed 🚀</p>
-    <button v-on:click="getIssues" >Áttekintés elkészítése!</button>
+    <button :disabled="loading" v-on:click="getIssues" >Áttekintés elkészítése!</button>
   </article>
+  <svg v-if="loading"  class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+  </svg>
   <hr  v-if="issueCount">
-  <Numbers id="1" v-if="issueCount" v-bind:issueCount="issueCount"/> 
-  <Authors id="2" v-if="authorsCounts" v-bind:authorsCounts="authorsCounts"/>
-  <Days id="3" v-if="daysCounts" v-bind:daysCounts="daysCounts"/>
-  <Projects id="4" v-if="projectCounts" v-bind:projectCounts="projectCounts"/>
-  <Prios id="4" v-if="priorityCounts" v-bind:priorityCounts="priorityCounts"/>
+  <div id="szamok"></div>
+  <Numbers  v-if="issueCount" v-bind:issueCount="issueCount"/> 
+  <div id="szerzok"></div>
+  <Authors v-if="authorsCounts" v-bind:authorsCounts="authorsCounts"/>
+  <div id="napok"></div>
+  <Days v-if="daysCounts" v-bind:daysCounts="daysCounts"/>
+  <div id="projectek"></div>
+  <Projects v-if="projectCounts" v-bind:projectCounts="projectCounts"/>
+  <div id="prioritasok"></div>
+  <Prios v-if="priorityCounts" v-bind:priorityCounts="priorityCounts"/>
+  <footer>
+    <p>
+    </p>
+  </footer>
 </template>
 
 <script>
@@ -59,6 +71,8 @@ export default {
     let daysCounts = ref()
     let priority
     let priorityCounts = ref()
+    let loading = ref(false)
+ 
 
     Date.prototype.getWeek = function() {
       const onejan = new Date(this.getFullYear(),0,1);
@@ -70,6 +84,7 @@ export default {
     }
 
     async function getIssues() {
+      loading.value = true
       console.time('getting issues')
       response.value = (await RedmineService.getAllUpdatedIssuesIn2020(loggedInUser.value.api_key, 0)).data
       issues.value = response.value.issues
@@ -89,7 +104,6 @@ export default {
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      //console.log(projectCounts)
 
       // authors aggregation
       authors = issues.value.map(issue => issue.author.name)
@@ -97,16 +111,14 @@ export default {
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      console.log(authorsCounts.value)
 
       // days aggregation
       // new Date(issue.updated_on).toLocaleString('hu-HU', {weekday:'long'})
-      days = issues.value.map(issue => new Date(issue.updated_on).toLocaleString('en-us', {weekday:'long'}))
+      days = issues.value.map(issue => new Date(issue.updated_on).toLocaleString('HU-hu', {weekday:'long'}))
       daysCounts.value = days.reduce((acc, value) => ({
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      //console.log(daysCounts)
 
       // prios aggregation
       priority = issues.value.map(issue => issue.priority.name)
@@ -114,7 +126,8 @@ export default {
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {});  
-      //console.log(priorityCounts)
+      
+      loading.value = false
     }
 
     return {
@@ -126,7 +139,8 @@ export default {
       projectCounts,
       daysCounts,
       priorityCounts,
-      userData
+      userData,
+      loading
     }
   }
 }
@@ -200,6 +214,10 @@ header > a:hover {
   color: white;
 }
 
+footer {
+  margin-top: 100px;
+}
+
 article {
   margin: auto;
   display: flex;
@@ -217,6 +235,20 @@ article {
 
 article:hover {
   box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
+}
+
+section {
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0px 25px 25px 25px;
+  align-items: center;
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .circle {
@@ -250,8 +282,52 @@ button {
   transition: all 1s;
 }
 
+button:disabled {
+  cursor: wait;
+}
+
 button:hover{
   color:#FFF;
   background-color:#2b9348;
+}
+
+.spinner {
+  z-index: 6;
+  margin: auto;
+  margin-top: 50px;
+  animation: rotator 1.4s linear infinite;
+}
+
+@keyframes rotator {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(270deg);}
+}
+
+.path {
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% {stroke: #4285f4;}
+  25% {stroke: #de3e35;}
+  50% {stroke: #f7c223;}
+  75% {stroke: #1b9a59;}
+  100% {stroke: #4285f4;}
+}
+
+@keyframes dash {
+  0% {stroke-dashoffset: 187;}
+  50% {
+    stroke-dashoffset: 46.75;
+    transform: rotate(135deg);
+  }
+
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(450deg);
+    }
 }
 </style>

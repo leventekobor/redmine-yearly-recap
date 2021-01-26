@@ -41,21 +41,6 @@ export default {
 </script>
 
 <style>
-.projects {
-  margin: auto;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: 0px 25px 25px 25px;
-  align-items: center;
-  background: white;
-  border-radius: 3px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  transition: 1s;
-}
-
 .projects-container {
   display: flex;
   width: 100%;

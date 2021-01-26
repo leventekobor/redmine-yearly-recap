@@ -25,7 +25,6 @@ export default {
   },
   setup(props) {
     const daysNumbers = ref(Object.fromEntries(Object.entries(props.daysCounts).sort(([,a],[,b]) => a-b)))
-    console.log(daysNumbers)
 
     const chartOptions = {
       labels: Object.keys(daysNumbers.value)
@@ -44,28 +43,15 @@ export default {
 </script>
 
 <style>
-.days {
-  margin: auto;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: 0px 25px 25px 25px;
-  align-items: center;
-  background: white;
-  border-radius: 3px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  transition: 1s;
-}
-
 .days-container {
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
   height: 320px;
+  transition: 1s;
 }
+
 
 .days-container > div {
   transition: 1s;
