@@ -3,7 +3,7 @@
     <h2>Melyik nap vagy a legaktívabb? 📅</h2>
     <div class="days-container">
       <apexchart
-      width="420"
+      width="520"
       type="bar"
       :options="chartOptions"
       :series="series"
@@ -24,12 +24,15 @@ export default {
     daysCounts: Object
   },
   setup(props) {
-    const daysNumbers = ref(props.daysCounts)
+    const daysNumbers = ref(Object.fromEntries(Object.entries(props.daysCounts).sort(([,a],[,b]) => a-b)))
+    console.log(daysNumbers)
 
     const chartOptions = {
       labels: Object.keys(daysNumbers.value)
     }
-    const series = Object.values(daysNumbers.value)
+    const series = [{
+      data: Object.values(daysNumbers.value)
+      }]
 
     return {
       daysNumbers,
@@ -61,7 +64,7 @@ export default {
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  height: 220px;
+  height: 320px;
 }
 
 .days-container > div {
