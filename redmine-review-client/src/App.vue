@@ -2,7 +2,8 @@
   <header>
     <a v-if="issueCount > 0" href="#1">Számok</a>
     <a v-if="authorsCounts" href="#2">Szerzők</a>
-    <a v-if="projectCounts" href="#3">Projektek</a>
+    <a v-if="daysCounts" href="#3">Napok</a>
+    <a v-if="projectCounts" href="#4">Projektek</a>
     <img :src='require(`../public/tigra.png`)'>
   </header>
   <h1 class="fade">Redmine éves áttekintés</h1>
@@ -18,7 +19,8 @@
   <hr  v-if="issueCount">
   <Numbers id="1" v-if="issueCount" v-bind:issueCount="issueCount"/> 
   <Authors id="2" v-if="authorsCounts" v-bind:authorsCounts="authorsCounts"/>
-  <Projects id="3" v-if="projectCounts" v-bind:projectCounts="projectCounts"/>
+  <Days id="3" v-if="daysCounts" v-bind:daysCounts="daysCounts"/>
+  <Projects id="4" v-if="projectCounts" v-bind:projectCounts="projectCounts"/>
 </template>
 
 <script>
@@ -27,6 +29,7 @@ import Authors from './components/Authors.vue'
 import Numbers from './components/Numbers.vue'
 import Login from './components/Login.vue'
 import Projects from './components/Projects.vue'
+import Days from './components/Days.vue'
 import { ref } from 'vue'
  
 export default {
@@ -35,6 +38,7 @@ export default {
     Login,
     Numbers,
     Authors,
+    Days,
     Projects
   },
 
