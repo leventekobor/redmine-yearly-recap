@@ -1,0 +1,73 @@
+<template>
+  <section class="prios">
+    <h2>Milyen prioritású feladatokon dolgoztál? ✈</h2>
+    <div class="prios-container">
+      <apexchart
+      width="520"
+      type="bar"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
+    </div>
+  </section>
+</template>
+
+<script>
+import { ref } from 'vue'
+import VueApexCharts from "vue3-apexcharts";
+
+export default {
+  components: {
+    apexchart: VueApexCharts,
+  },
+  props: {
+    priorityCounts: Object
+  },
+  setup(props) {
+    const priosNumbers = ref(props.priorityCounts)
+
+    const chartOptions = {
+      labels: Object.keys(priosNumbers.value)
+    }
+    const series = [{
+      data: Object.values(priosNumbers.value)
+      }]
+
+    return {
+      priosNumbers,
+      chartOptions,
+      series
+    }
+  }
+}
+</script>
+
+<style>
+.prios {
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0px 25px 25px 25px;
+  align-items: center;
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  transition: 1s;
+}
+
+.prios-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  height: 320px;
+}
+
+.prios-container > div {
+  transition: 1s;
+}
+
+</style>

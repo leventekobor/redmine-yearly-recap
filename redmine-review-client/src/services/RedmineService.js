@@ -36,7 +36,7 @@ export default {
     })
   },
   getAllUpdatedIssuesIn2020(apiKey, offset) {
-    return Api().get(`issues.json?updated_by=me&created_on=><2020-01-01|2020-12-31&limit=100&status_id=*&offset=${offset}`, {
+    return Api().get(`issues.json?updated_by=me&updated_on=><2020-01-01|2020-12-31&limit=100&status_id=*&offset=${offset}`, {
       headers: {
         'X-Redmine-API-Key': apiKey,
         "Target-URL": "https://redmine.tigra.hu/"

@@ -4,6 +4,7 @@
     <a v-if="authorsCounts" href="#2">Szerzők</a>
     <a v-if="daysCounts" href="#3">Napok</a>
     <a v-if="projectCounts" href="#4">Projektek</a>
+    <a v-if="priorityCounts" href="#4">Prioritás</a>
     <img :src='require(`../public/tigra.png`)'>
   </header>
   <h1 class="fade">Redmine éves áttekintés</h1>
@@ -21,10 +22,12 @@
   <Authors id="2" v-if="authorsCounts" v-bind:authorsCounts="authorsCounts"/>
   <Days id="3" v-if="daysCounts" v-bind:daysCounts="daysCounts"/>
   <Projects id="4" v-if="projectCounts" v-bind:projectCounts="projectCounts"/>
+  <Prios id="4" v-if="priorityCounts" v-bind:priorityCounts="priorityCounts"/>
 </template>
 
 <script>
 import RedmineService from '@/services/RedmineService.js'
+import Prios from './components/Prios.vue'
 import Authors from './components/Authors.vue'
 import Numbers from './components/Numbers.vue'
 import Login from './components/Login.vue'
@@ -38,6 +41,7 @@ export default {
     Login,
     Numbers,
     Authors,
+    Prios,
     Days,
     Projects
   },
