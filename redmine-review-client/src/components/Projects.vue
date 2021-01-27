@@ -46,7 +46,7 @@ export default {
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  height: 220px;
+  height: 290px;
 }
 
 .projects-container > div {

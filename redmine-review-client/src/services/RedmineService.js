@@ -11,8 +11,8 @@ export default {
       }
     })
   },
-  getIssues(apiKey) {
-    return Api().get("issues.json?assigned_to_id=me", {
+  getIssues(apiKey, issueId) {
+    return Api().get(`issues.json?issue_id=${issueId}`, {
       headers: {
         'X-Redmine-API-Key': apiKey,
         "Target-URL": "https://redmine.tigra.hu/"

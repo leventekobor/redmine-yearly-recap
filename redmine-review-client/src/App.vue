@@ -18,6 +18,9 @@
     <p>Ha megfelelő a név akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz hogy megkapd az éves áttekintésed 🚀</p>
     <button :disabled="loading" v-on:click="getIssues(); getTimeEntries();" >Áttekintés elkészítése!</button>
   </article>
+  <p v-if="loading">
+    Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel ez a folyamat akár perceking is eltarthat.🍻
+  </p>
   <svg v-if="loading"  class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
     <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
   </svg>
@@ -33,9 +36,10 @@
   <div id="prioritasok"></div>
   <Prios v-if="priorityCounts" v-bind:priorityCounts="priorityCounts"/>
   <div id="idok"></div>
-  <Entries v-if="timeEntriesCount" v-bind:timeEntriesCount="timeEntriesCount"/>
-  <footer>
+  <Entries v-if="timeEntriesCount" v-bind:timeEntriesCount="timeEntriesCount" v-bind:apiToken="apiToken"/>
+  <footer> 
     <p>
+      Ha bármilyen kérdésed van az alkalmazással kapcsolatban, esetleg valamilyen problémába ütköztél kérlek keress minket a tigra_sw_oktatas@tigra.hu címen.
     </p>
   </footer>
 </template>
@@ -78,6 +82,7 @@ export default {
     let loading = ref(false)
     let timeEntries = ref()
     let timeEntriesCount = ref()
+    let apiToken = ref()
  
 
     Date.prototype.getWeek = function() {
@@ -92,6 +97,7 @@ export default {
     async function getTimeEntries() {
       let response = ref()
       console.time('getting entries first round')
+      apiToken.value = loggedInUser.value.api_key
       response.value = (await RedmineService.getAllTimeEntriesIn2020(loggedInUser.value.api_key, 0)).data
       timeEntries.value = response.value.time_entries
       console.timeEnd('getting entries first round')
@@ -170,7 +176,8 @@ export default {
       loading,
       getTimeEntries,
       timeEntries,
-      timeEntriesCount
+      timeEntriesCount,
+      apiToken
     }
   }
 }
