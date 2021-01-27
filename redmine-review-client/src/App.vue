@@ -5,6 +5,7 @@
     <a v-if="daysCounts" href="#napok">Napok</a>
     <a v-if="projectCounts" href="#projectek">Projektek</a>
     <a v-if="priorityCounts" href="#prioritasok">Prioritás</a>
+    <a v-if="timeEntriesCount" href="#idok">Idők</a>
     <img :src='require(`../public/tigra.png`)'>
   </header>
   <h1 class="fade">Redmine éves áttekintés</h1>
@@ -15,7 +16,7 @@
     </div>
     <span>🦄 Név: {{ loggedInUser.firstname + " " + loggedInUser.lastname }}</span>
     <p>Ha megfelelő a név akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz hogy megkapd az éves áttekintésed 🚀</p>
-    <button :disabled="loading" v-on:click="getIssues" >Áttekintés elkészítése!</button>
+    <button :disabled="loading" v-on:click="getIssues(); getTimeEntries();" >Áttekintés elkészítése!</button>
   </article>
   <svg v-if="loading"  class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
     <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
@@ -31,6 +32,8 @@
   <Projects v-if="projectCounts" v-bind:projectCounts="projectCounts"/>
   <div id="prioritasok"></div>
   <Prios v-if="priorityCounts" v-bind:priorityCounts="priorityCounts"/>
+  <div id="idok"></div>
+  <Entries v-if="timeEntriesCount" v-bind:timeEntriesCount="timeEntriesCount"/>
   <footer>
     <p>
     </p>
@@ -45,6 +48,7 @@ import Numbers from './components/Numbers.vue'
 import Login from './components/Login.vue'
 import Projects from './components/Projects.vue'
 import Days from './components/Days.vue'
+import Entries from './components/Entries.vue'
 import { ref } from 'vue'
  
 export default {
@@ -55,13 +59,13 @@ export default {
     Authors,
     Prios,
     Days,
+    Entries,
     Projects
   },
 
   setup () {
     let loggedInUser = ref()
     let issues = ref([])
-    let response = ref()
     let issueCount = ref()
     let projects
     let projectCounts = ref()
@@ -72,6 +76,8 @@ export default {
     let priority
     let priorityCounts = ref()
     let loading = ref(false)
+    let timeEntries = ref()
+    let timeEntriesCount = ref()
  
 
     Date.prototype.getWeek = function() {
@@ -83,20 +89,41 @@ export default {
       loggedInUser.value = {...user.value.user}
     }
 
-    async function getIssues() {
-      loading.value = true
-      console.time('getting issues')
-      response.value = (await RedmineService.getAllUpdatedIssuesIn2020(loggedInUser.value.api_key, 0)).data
-      issues.value = response.value.issues
-      issueCount.value = response.value.total_count
+    async function getTimeEntries() {
+      let response = ref()
+      console.time('getting entries first round')
+      response.value = (await RedmineService.getAllTimeEntriesIn2020(loggedInUser.value.api_key, 0)).data
+      timeEntries.value = response.value.time_entries
+      console.timeEnd('getting entries first round')
       if(response.value.total_count > 100) {
         let iterations = Math.ceil(response.value.total_count / 100)
         for(let i = 1; i < iterations; i++) {
-          response.value = (await RedmineService.getAllUpdatedIssuesIn2020(loggedInUser.value.api_key, (i * 100))).data
-          issues.value = [...issues.value, ...response.value.issues]
+          console.time('getting more entries')
+          response.value = (await RedmineService.getAllTimeEntriesIn2020(loggedInUser.value.api_key, (i * 100))).data
+          timeEntries.value = [...timeEntries.value, ...response.value.time_entries]
+          console.timeEnd('getting more entries')
         }
       }
-      console.timeEnd('getting issues')
+      timeEntriesCount.value = timeEntries.value
+    }
+
+    async function getIssues() {
+      let response = ref()
+      loading.value = true
+      console.time('getting issues first round')
+      response.value = (await RedmineService.getAllUpdatedIssuesIn2020(loggedInUser.value.api_key, 0)).data
+      issues.value = response.value.issues
+      issueCount.value = response.value.total_count
+      console.timeEnd('getting issues first round')
+      if(response.value.total_count > 100) {
+        let iterations = Math.ceil(response.value.total_count / 100)
+        for(let i = 1; i < iterations; i++) {
+          console.time('getting more issues')
+          response.value = (await RedmineService.getAllUpdatedIssuesIn2020(loggedInUser.value.api_key, (i * 100))).data
+          issues.value = [...issues.value, ...response.value.issues]
+          console.timeEnd('getting more issues')
+        }
+      }
 
       // projects aggregation 
       projects = issues.value.map(issue => issue.project.name)
@@ -140,7 +167,10 @@ export default {
       daysCounts,
       priorityCounts,
       userData,
-      loading
+      loading,
+      getTimeEntries,
+      timeEntries,
+      timeEntriesCount
     }
   }
 }

@@ -42,5 +42,13 @@ export default {
         "Target-URL": "https://redmine.tigra.hu/"
       }
     })
+  },
+  getAllTimeEntriesIn2020(apiKey, offset) {
+    return Api().get(`time_entries.json?user_id=me&limit=100&from=2020-01-01&to=2020-12-31&offset=${offset}`, {
+      headers: {
+        'X-Redmine-API-Key': apiKey,
+        "Target-URL": "https://redmine.tigra.hu/"
+      }
+    })
   }
 }
