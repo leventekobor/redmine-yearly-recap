@@ -39,7 +39,7 @@
   <Entries v-if="timeEntriesCount" v-bind:timeEntriesCount="timeEntriesCount" v-bind:apiToken="apiToken"/>
   <footer> 
     <p>
-      Ha bármilyen kérdésed van az alkalmazással kapcsolatban, esetleg valamilyen problémába ütköztél kérlek keress minket a tigra_sw_oktatas@tigra.hu címen.
+      Ha bármilyen kérdésed van az alkalmazással kapcsolatban, esetleg valamilyen problémába ütköztél kérlek keress minket a tigra_sw_oktatas@tigra.hu címen
     </p>
   </footer>
 </template>

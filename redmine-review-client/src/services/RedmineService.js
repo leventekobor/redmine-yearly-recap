@@ -1,7 +1,5 @@
 import Api from '@/services/Api'
 
-// https://redmine.tigra.hu//issues.json?assigned_to_id=me&created_on=><2020-01-01|2020-12-31&limit=100
-
 export default {
   getUser(apiKey) {
     return Api().get("users/current.json", {
