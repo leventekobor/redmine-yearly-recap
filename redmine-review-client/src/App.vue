@@ -71,13 +71,9 @@ export default {
     let loggedInUser = ref()
     let issues = ref([])
     let issueCount = ref()
-    let projects
     let projectCounts = ref()
-    let authors
     let authorsCounts = ref()
-    let days
     let daysCounts = ref()
-    let priority
     let priorityCounts = ref()
     let loading = ref(false)
     let timeEntries = ref()
@@ -113,6 +109,14 @@ export default {
       timeEntriesCount.value = timeEntries.value
     }
 
+    function aggregateData(array) {
+      const result = array.reduce((acc, value) => ({
+        ...acc,
+        [value]: (acc[value] || 0) + 1
+      }), {});  
+      return result
+    }
+
     async function getIssues() {
       let response = ref()
       loading.value = true
@@ -131,34 +135,17 @@ export default {
         }
       }
 
-      // projects aggregation 
-      projects = issues.value.map(issue => issue.project.name)
-      projectCounts.value = projects.reduce((acc, value) => ({
-        ...acc,
-        [value]: (acc[value] || 0) + 1
-      }), {});  
+      let projects = issues.value.map(issue => issue.project.name)
+      projectCounts.value = aggregateData(projects)
 
-      // authors aggregation
-      authors = issues.value.map(issue => issue.author.name)
-      authorsCounts.value = authors.reduce((acc, value) => ({
-        ...acc,
-        [value]: (acc[value] || 0) + 1
-      }), {});  
+      let authors = issues.value.map(issue => issue.author.name)
+      authorsCounts.value = aggregateData(authors)
 
-      // days aggregation
-      // new Date(issue.updated_on).toLocaleString('hu-HU', {weekday:'long'})
-      days = issues.value.map(issue => new Date(issue.updated_on).toLocaleString('HU-hu', {weekday:'long'}))
-      daysCounts.value = days.reduce((acc, value) => ({
-        ...acc,
-        [value]: (acc[value] || 0) + 1
-      }), {});  
+      let days = issues.value.map(issue => new Date(issue.updated_on).toLocaleString('hu-HU', {weekday:'long'}))
+      daysCounts.value = aggregateData(days)
 
-      // prios aggregation
-      priority = issues.value.map(issue => issue.priority.name)
-      priorityCounts.value = priority.reduce((acc, value) => ({
-        ...acc,
-        [value]: (acc[value] || 0) + 1
-      }), {});  
+      let priority = issues.value.map(issue => issue.priority.name)
+      priorityCounts.value = aggregateData(priority)
       
       loading.value = false
     }

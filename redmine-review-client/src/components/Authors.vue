@@ -52,5 +52,4 @@ export default {
 .authors-container > div {
   transition: 1s;
 }
-
 </style>
