@@ -10,6 +10,7 @@ export default {
     })
   },
   getIssues(apiKey, issueId) {
+    //console.log(apiKey, issueId)
     return Api().get(`issues.json?issue_id=${issueId}`, {
       headers: {
         'X-Redmine-API-Key': apiKey,

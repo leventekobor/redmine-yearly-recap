@@ -29,6 +29,7 @@ export default {
     function getAggregatedProjectHours() {
       let arrayEntries = Object.entries(timeEntries)[0][1].map(i => { return {project: i.project.name, hours:i.hours}})
       
+      
       let foo = arrayEntries.reduce(function(acc, val){
         var o = acc.filter(function(obj){
           return obj.project==val.project;
