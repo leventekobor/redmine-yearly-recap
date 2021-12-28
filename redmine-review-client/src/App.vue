@@ -29,6 +29,8 @@
   <Prios v-if="priorityCounts" v-bind:priorityCounts="priorityCounts"/>
   <div id="idok"></div>
   <Entries v-if="timeEntriesCount" v-bind:timeEntriesCount="timeEntriesCount" v-bind:apiToken="apiToken"/>
+  <ProjectsHours v-if="entriesProjectCount" v-bind:entriesProjectCount="entriesProjectCount"/>
+  <EntriesHours v-if="entriesHoursCount" v-bind:entriesHoursCount="entriesHoursCount" v-bind:apiToken="apiToken"/>
   <footer> 
     <p>
       Ha bármilyen kérdésed van az alkalmazással kapcsolatban, esetleg valamilyen problémába ütköztél kérlek keress minket a tigra_sw_oktatas@tigra.hu címen.
@@ -45,6 +47,8 @@ import Login from './components/Login.vue'
 import Projects from './components/Projects.vue'
 import Days from './components/Days.vue'
 import Entries from './components/Entries.vue'
+import ProjectsHours from './components/ProjectsHours.vue'
+import EntriesHours from './components/EntriesHours.vue'
 import { ref } from 'vue'
  
 export default {
@@ -56,7 +60,9 @@ export default {
     Prios,
     Days,
     Entries,
-    Projects
+    Projects,
+    ProjectsHours,
+    EntriesHours
   },
 
   setup () {
@@ -71,6 +77,8 @@ export default {
     let timeEntries = ref()
     let timeEntriesCount = ref()
     let apiToken = ref()
+    let entriesProjectCount = ref()
+    let entriesHoursCount = ref()
  
 
     Date.prototype.getWeek = function() {
@@ -80,6 +88,33 @@ export default {
 
     function userData(user) {
       loggedInUser.value = {...user.value.user}
+    }
+
+    function aggregateData(array) {
+      const result = array.reduce((acc, value) => ({
+        ...acc,
+        [value]: (acc[value] || 0) + 1
+      }), {});  
+      return result
+    }
+
+    function aggregateEntriesData(array) {
+      let foo = array.reduce(function(acc, val){
+        var o = acc.filter(function(obj){
+          return obj.project==val.project;
+        }).pop() || {project:val.project, hours:0};
+        
+        o.hours += val.hours;
+        acc.push(o);
+        return acc;
+      },[]);
+
+      let finalResult = foo.filter(function(itm, i, a) {
+        return i == a.indexOf(itm);
+      });
+
+      finalResult.sort((a, b) => b.hours - a.hours)
+      return finalResult
     }
 
     async function getTimeEntries() {
@@ -99,14 +134,27 @@ export default {
         }
       }
       timeEntriesCount.value = timeEntries.value
-    }
 
-    function aggregateData(array) {
-      const result = array.reduce((acc, value) => ({
-        ...acc,
-        [value]: (acc[value] || 0) + 1
-      }), {});  
-      return result
+      let entires = Object.entries(timeEntries)[0][1].map(i => { return {project: i.project.name, hours:i.hours}})
+      entriesProjectCount.value = aggregateEntriesData(entires)
+
+      let hoursEntries = Object.entries(timeEntries)[0][1].map(i => { return {issue: i.issue.id, hours:i.hours}})
+      
+      let foo = hoursEntries.reduce(function(acc, val){
+          var o = acc.filter(function(obj){
+              return obj.issue==val.issue;
+          }).pop() || {issue:val.issue, hours:0};
+          
+          o.hours += val.hours;
+          acc.push(o);
+          return acc;
+      },[]);
+
+      entriesHoursCount.value = foo.filter(function(itm, i, a) {
+        return i == a.indexOf(itm);
+      });
+
+      entriesHoursCount.value.sort((a, b) => b.hours - a.hours)
     }
 
     async function getIssues() {
@@ -156,7 +204,9 @@ export default {
       getTimeEntries,
       timeEntries,
       timeEntriesCount,
-      apiToken
+      apiToken,
+      entriesProjectCount,
+      entriesHoursCount
     }
   }
 }

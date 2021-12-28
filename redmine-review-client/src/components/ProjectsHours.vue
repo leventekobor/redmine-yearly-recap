@@ -1,7 +1,7 @@
 <template>
-  <section class="days">
-    <h2>Melyik nap voltál a legaktívabb? 📅</h2>
-    <div class="days-container">
+  <section class="projects">
+    <h2>Melyik projekten dolgoztál a legtöbb órát? 💻</h2>
+    <div class="projects-container">
       <apexchart
       width="520"
       type="bar"
@@ -21,20 +21,21 @@ export default {
     apexchart: VueApexCharts,
   },
   props: {
-    daysCounts: Object
+    entriesProjectCount: Object
   },
   setup(props) {
-    const daysNumbers = ref(Object.fromEntries(Object.entries(props.daysCounts).sort(([,a],[,b]) => a-b)))
+    const projectNumbers = ref(props.entriesProjectCount)
+    const topPojrectNumbers = projectNumbers.value.splice(0, 3)
+
 
     const chartOptions = {
-      labels: Object.keys(daysNumbers.value)
+      labels: Object.values(topPojrectNumbers.map(i => i.project))
     }
     const series = [{
-      data: Object.values(daysNumbers.value)
-      }]
+      data: Object.values(topPojrectNumbers.map(i => i.hours))
+    }]
 
     return {
-      daysNumbers,
       chartOptions,
       series
     }
@@ -43,17 +44,15 @@ export default {
 </script>
 
 <style>
-.days-container {
+.projects-container {
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  height: 320px;
-  transition: 1s;
+  height: 290px;
 }
 
-
-.days-container > div {
+.projects-container > div {
   transition: 1s;
 }
 
