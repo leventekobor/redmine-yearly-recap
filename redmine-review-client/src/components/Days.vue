@@ -1,6 +1,6 @@
 <template>
   <section class="days">
-    <h2>Melyik nap vagy a legaktívabb? 📅</h2>
+    <h2>Melyik nap voltál a legaktívabb? 📅</h2>
     <div class="days-container">
       <apexchart
       width="520"

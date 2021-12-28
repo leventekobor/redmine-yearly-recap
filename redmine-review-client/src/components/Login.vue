@@ -1,13 +1,19 @@
 <template>
-  <form @submit.prevent="getUser">
-    <img :src='require(`../assets/stats.svg`)'>
-    <div class="form-container">
-      <label for="api-token">API kulcs</label>
-      <input placeholder="API kulcs" v-model="apiKey" id="api-token" name="api-token" type="text">
-      <button>Bejelentkezés</button>
-    </div>
-  </form>
-  <div v-bind:class="{ active: isActive }" class="toast" id="errorToast">Sikertelen bejelentkezés</div>
+  <section class="login-container">
+    <h2>Redmine yearly recap</h2>
+    <form @submit.prevent="getUser" class="form-control">
+      <q-input outlined  v-model="username" id="username" name="username" type="text"></q-input>
+      <q-input outlined  v-model="password" id="password" name="password" type="password" autocomplete="on"></q-input>
+      <div class="devider">
+        <div class="line"></div>
+        <p>Or with API key</p>
+        <div class="line"></div>
+      </div>
+      <p class="info">Fill in API key for login. API key is available at the link below: <button class="as-link" @click="getAPILink">API key</button></p>
+      <q-input outlined class="" v-model="apiKey" id="api-token" name="api-token" type="text" label="API key"></q-input>
+      <button class="action">LOG IN</button>
+    </form>
+  </section>
 </template>
 
 <script>
@@ -19,95 +25,114 @@ export default {
   emits: ["userLoad"],
   setup(_,{ emit }) {
     const apiKey = ref('')
+    const username = ref('')
+    const password = ref('')
     let user = ref('')
     let isActive = ref(false)
 
     async function getUser() {
       try {
-        const response = (await RedmineService.getUser(apiKey.value))
-        user.value = response.data
-        emit('userLoad', user);
+        if(username.value && password.value) {
+          let response = await RedmineService.getUserByPassword({
+            "username": username.value, 
+            "password": password.value 
+          })
+          user.value = response.data
+          emit('userLoad', user);
+        } else {
+          const response = (await RedmineService.getUser(apiKey.value))
+          user.value = response.data
+          emit('userLoad', user);
+        }
       } catch (error) {
-        isActive.value = true
-        setTimeout(() => isActive.value = false, 2000)
-        apiKey.value = ""
+          isActive.value = true
+          setTimeout(() => isActive.value = false, 2000)
+          apiKey.value = ""
+          username.value = ""
+          password.value = ""
       }
     }
 
+    async function getAPILink() {
+      const response = await RedmineService.getRedmineUrl()
+      const apiKeyUrl = response.data + "/my/account"
+      window.open(apiKeyUrl)
+    }
+
     return {
-      apiKey,
       user,
       isActive,
-      getUser
+      getUser,
+      username,
+      password,
+      getAPILink,
+      apiKey
     }
   }
 }
 </script>
 
-<style>
-form {
-  height: 100%;
-  padding: 10px;
-  margin: auto;
+
+<style lang="scss" scoped>
+.login-container {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  z-index: 2;
+  width: 37.5rem;
+  height: 40rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  .form-control {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 28.125rem;
+  }
+
+  .hidden-text {
+    -webkit-text-security: disc;
+  }
+
+  h2 {
+    font-size: 2rem;
+    line-height: 2.125rem;
+    font-weight: 400;
+    margin: 0px;
+  }
+
+  .as-link {
+    border: none;
+    background: transparent;
+    color: darkblue;
+    padding: 0px;
+  }
+
+  .devider {
+    padding-block-start: 2rem;
+    padding-block-end: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      color: #666;
+      width: 100%;
+      margin: 0px;
+      padding-inline-start: 1rem;
+      padding-inline-end: 1rem;
+    }
+
+    .line {
+      border-bottom: 1px solid #666;
+      width: 100%;
+    }
+  } 
 }
 
-.form-container {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  justify-content: flex-start;
-  align-items: normal;
-  margin-top: 10px;
+@media screen and (max-width: 480px) {
+  .login-container {
+    width: 18rem;
+  }
 }
 
-img {
-  z-index: 0;
-  margin-top: 170px;
-}
-
-.form-container > button {
-  height: 30px;
-  margin-top: 10px;
-}
-
-.form-container > label {
-  display: flex;
-}
-
-.form-container > input {
-  height: 20px;
-}
-
-.toast {
-  position: fixed;
-  left: calc(-50vw + 50%);
-  right: calc(-50vw + 50%);
-  margin-left: auto;
-  margin-right: auto;
-  visibility: hidden;
-  min-width: 250px;
-  max-width: 300px;
-  color: #fff;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  z-index: 1;
-  bottom: 30px;
-  font-size: 17px;
-  background-color: #e76f51;
-}
-
-.active {
-  visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  z-index: 5;
-}
 
 </style>

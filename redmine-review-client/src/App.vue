@@ -1,25 +1,17 @@
 <template>
   <header>
-    <a v-if="issueCount > 0" href="#szamok">Számok</a>
-    <a v-if="authorsCounts" href="#szerzok">Szerzők</a>
-    <a v-if="daysCounts" href="#napok">Napok</a>
-    <a v-if="projectCounts" href="#projectek">Projektek</a>
-    <a v-if="priorityCounts" href="#prioritasok">Prioritás</a>
-    <a v-if="timeEntriesCount" href="#idok">Idők</a>
-    <img :src='require(`../public/tigra.png`)'>
   </header>
-  <h1 class="fade">Redmine éves áttekintés</h1>
   <Login v-if="!loggedInUser" @userLoad="userData" />
   <article  v-else id="card">
     <div class="circle">
       {{ (loggedInUser.firstname)[0] }}  {{ (loggedInUser.lastname)[0] }}
     </div>
     <span>🦄 Név: {{ loggedInUser.firstname + " " + loggedInUser.lastname }}</span>
-    <p>Ha megfelelő a név akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz hogy megkapd az éves áttekintésed 🚀</p>
+    <p>Ha megfelelő a név, akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz, hogy megkapd az éves áttekintésed 🚀</p>
     <button :disabled="loading" v-on:click="getIssues(); getTimeEntries();" >Áttekintés elkészítése!</button>
   </article>
   <p v-if="loading">
-    Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel ez a folyamat akár perceking is eltarthat.🍻
+    Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel, ez a folyamat akár perceking is eltarthat.🍻
   </p>
   <svg v-if="loading"  class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
     <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
@@ -39,7 +31,7 @@
   <Entries v-if="timeEntriesCount" v-bind:timeEntriesCount="timeEntriesCount" v-bind:apiToken="apiToken"/>
   <footer> 
     <p>
-      Ha bármilyen kérdésed van az alkalmazással kapcsolatban, esetleg valamilyen problémába ütköztél kérlek keress minket a tigra_sw_oktatas@tigra.hu címen
+      Ha bármilyen kérdésed van az alkalmazással kapcsolatban, esetleg valamilyen problémába ütköztél kérlek keress minket a tigra_sw_oktatas@tigra.hu címen.
     </p>
   </footer>
 </template>
@@ -172,22 +164,14 @@ export default {
 
 
 
-<style>
+<style lang="scss">
 
-html, 
-body {
+html, body {
     margin: 0;
     padding: 0;
-    background-color: #FFF2EB;
+    background-color: #F8F9FF;
     scroll-behavior: smooth;
-}
-
-hr {
-  color: black;
-  z-index: 3;
-  margin: 60px 10px 60px 10px;
-
-  
+    font-size: 16px;
 }
 
 #app {
@@ -196,22 +180,7 @@ hr {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  display: flex;
-  flex-direction: column;
-}
-
-header {
-  z-index: 4;
-  width: 100%;
-  height: 50px;
-  position: sticky;
-  top: 0;
-  background-color: #A0CED9;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
 }
 
 header > img {
@@ -231,11 +200,6 @@ header > a {
   text-decoration: none;
   font-size: 20px;
   transition: 1s;
-}
-
-header > a:hover {
-  background-color: #1D4049;
-  color: white;
 }
 
 footer {
