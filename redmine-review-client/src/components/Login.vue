@@ -83,26 +83,50 @@ export default {
 
 <style lang="scss" scoped>
 .login-container {
+  background-color: #FFFFFF;
   display: flex;
+  flex-direction: column;
   width: 29.5rem;
-  height: 32rem;
+  height: 30rem;
   border-radius: 10px;
+  padding: 2.25rem;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(0, 0, 0, 0.2);
 
   img {
     height: 1.5rem;
-
+    width: fit-content;
   }
 
   .form-control {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 15.125rem;
-    width: 24.625rem;
-
+    padding-block-start: 2rem;
+    height: 100%;
+    
     button {
+      cursor: pointer;
+      display:inline-block;
+      padding: 0.35em 1.2em;
       height: 2.75rem;
+      border: none;
+      margin-top: 5px;
+      border-radius: 3px;
+      box-sizing: border-box;
+      text-decoration:none;
+      font-family:'Roboto',sans-serif;
+      font-weight:300;
+      color:#FFF;
+      text-align:center;
+      background-color: #084c61;
+      transition: all 1s;
+    }
+    button:disabled {
+      cursor: wait;
+    }
+    button:hover{
+      color:#FFF;
+      background-color:#2b9348;
     }
   }
 
@@ -111,6 +135,7 @@ export default {
   }
 
   h2 {
+    padding-block-start: 1rem;
     font-size: 2rem;
     line-height: 2.125rem;
     font-weight: 400;

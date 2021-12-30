@@ -16,14 +16,14 @@ export default {
     })
   },
   getAllUpdatedIssues(apiKey, offset) {
-    return Api().get(`issues.json?updated_by=me&updated_on=><2020-01-01|2020-12-31&limit=100&status_id=*&offset=${offset}`, {
+    return Api().get(`issues.json?updated_by=me&updated_on=><2021-01-01|2021-12-31&limit=100&status_id=*&offset=${offset}`, {
       headers: {
         'X-Redmine-API-Key': apiKey
       }
     })
   },
   getAllTimeEntries(apiKey, offset) {
-    return Api().get(`time_entries.json?user_id=me&limit=100&from=2020-01-01&to=2020-12-31&offset=${offset}`, {
+    return Api().get(`time_entries.json?user_id=me&limit=100&from=2021-01-01&to=2021-12-31&offset=${offset}`, {
       headers: {
         'X-Redmine-API-Key': apiKey
       }
