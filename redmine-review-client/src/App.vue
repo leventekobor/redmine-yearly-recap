@@ -1,15 +1,9 @@
 <template>
-  <header>
-  </header>
   <Login v-if="!loggedInUser" @userLoad="userData" />
-  <article  v-else id="card">
-    <div class="circle">
-      {{ (loggedInUser.firstname)[0] }}  {{ (loggedInUser.lastname)[0] }}
-    </div>
-    <span>🦄 Név: {{ loggedInUser.firstname + " " + loggedInUser.lastname }}</span>
-    <p>Ha megfelelő a név, akkor sikeres volt az autentikálás! Már csak rá kell kattintanod a gombra ahhoz, hogy megkapd az éves áttekintésed 🚀</p>
-    <button :disabled="loading" v-on:click="getIssues(); getTimeEntries();" >Áttekintés elkészítése!</button>
-  </article>
+  <Dashboard  v-else id="card">
+  </Dashboard>
+  <button :disabled="loading" v-on:click="getIssues(); getTimeEntries();" >Áttekintés elkészítése!</button>
+  <p> number of issues {{ timeEntriesCount }} </p>
   <p v-if="loading">
     Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel, ez a folyamat akár perceking is eltarthat.🍻
   </p>
@@ -47,6 +41,7 @@ import Login from './components/Login.vue'
 import Projects from './components/Projects.vue'
 import Days from './components/Days.vue'
 import Entries from './components/Entries.vue'
+import Dashboard from './components/Dashboard.vue'
 import ProjectsHours from './components/ProjectsHours.vue'
 import EntriesHours from './components/EntriesHours.vue'
 import { ref } from 'vue'
@@ -62,7 +57,8 @@ export default {
     Entries,
     Projects,
     ProjectsHours,
-    EntriesHours
+    EntriesHours,
+    Dashboard
   },
 
   setup () {
@@ -121,14 +117,14 @@ export default {
       let response = ref()
       console.time('getting entries first round')
       apiToken.value = loggedInUser.value.api_key
-      response.value = (await RedmineService.getAllTimeEntriesIn2020(loggedInUser.value.api_key, 0)).data
+      response.value = (await RedmineService.getAllTimeEntries(loggedInUser.value.api_key, 0)).data
       timeEntries.value = response.value.time_entries
       console.timeEnd('getting entries first round')
       if(response.value.total_count > 100) {
         let iterations = Math.ceil(response.value.total_count / 100)
         for(let i = 1; i < iterations; i++) {
           console.time('getting more entries')
-          response.value = (await RedmineService.getAllTimeEntriesIn2020(loggedInUser.value.api_key, (i * 100))).data
+          response.value = (await RedmineService.getAllTimeEntries(loggedInUser.value.api_key, (i * 100))).data
           timeEntries.value = [...timeEntries.value, ...response.value.time_entries]
           console.timeEnd('getting more entries')
         }
@@ -161,7 +157,7 @@ export default {
       let response = ref()
       loading.value = true
       console.time('getting issues first round')
-      response.value = (await RedmineService.getAllUpdatedIssuesIn2020(loggedInUser.value.api_key, 0)).data
+      response.value = (await RedmineService.getAllUpdatedIssues(loggedInUser.value.api_key, 0)).data
       issues.value = response.value.issues
       issueCount.value = response.value.total_count
       console.timeEnd('getting issues first round')
@@ -169,7 +165,7 @@ export default {
         let iterations = Math.ceil(response.value.total_count / 100)
         for(let i = 1; i < iterations; i++) {
           console.time('getting more issues')
-          response.value = (await RedmineService.getAllUpdatedIssuesIn2020(loggedInUser.value.api_key, (i * 100))).data
+          response.value = (await RedmineService.getAllUpdatedIssues(loggedInUser.value.api_key, (i * 100))).data
           issues.value = [...issues.value, ...response.value.issues]
           console.timeEnd('getting more issues')
         }

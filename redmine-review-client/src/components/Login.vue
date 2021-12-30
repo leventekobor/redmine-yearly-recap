@@ -1,19 +1,22 @@
 <template>
   <section class="login-container">
-    <h2>Redmine yearly recap</h2>
+    <img :src='require(`../../public/tigra.png`)'>
+    <h2>Redmine Yearly Recap Login</h2>
     <form @submit.prevent="getUser" class="form-control">
-      <q-input outlined  v-model="username" id="username" name="username" type="text"></q-input>
-      <q-input outlined  v-model="password" id="password" name="password" type="password" autocomplete="on"></q-input>
-      <div class="devider">
-        <div class="line"></div>
-        <p>Or with API key</p>
-        <div class="line"></div>
-      </div>
-      <p class="info">Fill in API key for login. API key is available at the link below: <button class="as-link" @click="getAPILink">API key</button></p>
-      <q-input outlined class="" v-model="apiKey" id="api-token" name="api-token" type="text" label="API key"></q-input>
+      <q-input outlined v-model="username" id="username" name="username" type="text" label="Username" autocomplete="username"></q-input>
+      <q-input outlined v-model="password" id="password" name="password" :type="isPwd ? 'password' : 'text'" autocomplete="new-password" label="Password">
+        <template v-slot:append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
+          />
+        </template>
+      </q-input>
       <button class="action">LOG IN</button>
     </form>
   </section>
+  <div v-bind:class="{ active: isActive }" class="toast" id="errorToast">Login falid</div>
 </template>
 
 <script>
@@ -29,7 +32,9 @@ export default {
     const password = ref('')
     let user = ref('')
     let isActive = ref(false)
-
+    let isPwd = ref(true)
+    let isPwdToken = ref(true)
+    
     async function getUser() {
       try {
         if(username.value && password.value) {
@@ -45,6 +50,7 @@ export default {
           emit('userLoad', user);
         }
       } catch (error) {
+          console.log(error)
           isActive.value = true
           setTimeout(() => isActive.value = false, 2000)
           apiKey.value = ""
@@ -66,7 +72,9 @@ export default {
       username,
       password,
       getAPILink,
-      apiKey
+      apiKey,
+      isPwd,
+      isPwdToken
     }
   }
 }
@@ -76,16 +84,26 @@ export default {
 <style lang="scss" scoped>
 .login-container {
   display: flex;
-  width: 37.5rem;
-  height: 40rem;
+  width: 29.5rem;
+  height: 32rem;
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  img {
+    height: 1.5rem;
+
+  }
 
   .form-control {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 28.125rem;
+    height: 15.125rem;
+    width: 24.625rem;
+
+    button {
+      height: 2.75rem;
+    }
   }
 
   .hidden-text {
@@ -131,8 +149,37 @@ export default {
 @media screen and (max-width: 480px) {
   .login-container {
     width: 18rem;
+
+    .form-control {
+      width: 16rem;
+    }
   }
 }
 
+.toast {
+  position: fixed;
+  left: calc(-50vw + 50%);
+  right: calc(-50vw + 50%);
+  margin-left: auto;
+  margin-right: auto;
+  visibility: hidden;
+  min-width: 250px;
+  max-width: 300px;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  z-index: 1;
+  bottom: 30px;
+  font-size: 17px;
+  background-color: #e76f51;
+}
+
+.active {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  z-index: 5;
+}
 
 </style>
