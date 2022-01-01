@@ -1,10 +1,17 @@
 <template>
   <section class="dashboard">
+    <h1>A 2021-es éved Redmine összefoglalója</h1>
     <article v-if="loading" class="loading-container">
       <label class="loading-text">
         Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel, ez a folyamat akár perceking is eltarthat.🍻
         <progress id="data-loading" :max="totalData " :value="collectedData" />
       </label>
+    </article>
+    <article class="data-container">
+      <Entries v-if="!loading && entries" :entries="entries" >
+      </Entries>
+      <Issues v-if="!loading && issues" :issues="issues" >
+      </Issues>
     </article>
   </section>
 </template>
@@ -12,16 +19,22 @@
 <script>
 import { ref, onMounted } from 'vue'
 import RedmineService from '@/services/RedmineService.js'
+import Entries from '@/components/Entries'
+import Issues from '@/components/Issues'
 
 export default {
   name: "Dashboard",
+  components: {
+    Entries,
+    Issues
+  },
   props: {
     apiKey: String
   },
   setup(props) {
     const userApiKey =ref(props.apiKey)
-    let issues
-    let entries
+    let issues = ref([])
+    let entries = ref([])
     const totalData = ref(0)
     const collectedData = ref(0)
     let loading = ref(true)
@@ -47,35 +60,31 @@ export default {
     async function getIssues() {
       const PAGE_SIZE = 100;
       const { issues: firstIssues, total_count } = await _getIssuesWithOffset();
-      issues = [...firstIssues];
+      issues.value = [...firstIssues];
       totalData.value += total_count
       
       if(total_count > PAGE_SIZE) {
         const iterations = Math.ceil(total_count / PAGE_SIZE)
         for(let i = 1; i < iterations; i++) {
           const { issues: currentIssues } = await _getIssuesWithOffset(i * PAGE_SIZE)
-          issues = [...issues, ...currentIssues]
+          issues.value = [...issues.value, ...currentIssues]
         }
       }
-      console.log(total_count)
-      console.log(issues)
     }
 
     async function getEntries() {
       const PAGE_SIZE = 100;
       const { time_entries: firstEntries, total_count } = await _getEntriesWithOffset();
-      entries = [...firstEntries];
+      entries.value = [...firstEntries];
       totalData.value += total_count
       
       if(total_count > PAGE_SIZE) {
         const iterations = Math.ceil(total_count / PAGE_SIZE)
         for(let i = 1; i < iterations; i++) {
           const { time_entries: currentEntries } = await _getEntriesWithOffset(i * PAGE_SIZE)
-          entries = [...entries, ...currentEntries]
+          entries.value = [...entries.value, ...currentEntries]
         }
       }
-      console.log(total_count)
-      console.log(entries)
     }
 
     onMounted(() => {
@@ -86,7 +95,9 @@ export default {
       userApiKey,
       totalData,
       collectedData,
-      loading
+      loading,
+      entries,
+      issues
     }
   }
 }
@@ -102,6 +113,17 @@ export default {
   padding: 3rem;
   width: 100%;
   height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  h1 {
+    font-size: 2rem;
+    line-height: 2.25rem;
+    margin-block-start: 0rem;
+  } 
 
   .loading-container {
     padding: 2rem;
@@ -116,8 +138,14 @@ export default {
       width: 100%;
       accent-color: #2b9348;
     }
+  }
 
-
+  .data-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
   }
 }
 
