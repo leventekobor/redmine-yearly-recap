@@ -114,7 +114,6 @@ export default {
       border-radius: 3px;
       box-sizing: border-box;
       text-decoration:none;
-      font-family:'Roboto',sans-serif;
       font-weight:300;
       color:#FFF;
       text-align:center;
@@ -171,9 +170,9 @@ export default {
   } 
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 560px) {
   .login-container {
-    width: 18rem;
+    width: 20rem;
 
     .form-control {
       width: 16rem;
