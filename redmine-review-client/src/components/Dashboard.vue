@@ -80,6 +80,7 @@ export default {
   margin-inline: 3rem;
   padding: 3rem;
   width: 100%;
+  max-width: 1600px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -90,6 +91,7 @@ export default {
     font-size: 2rem;
     line-height: 2.25rem;
     margin-block-start: 0rem;
+    font-weight: 500;
   } 
 
   .loading-container {

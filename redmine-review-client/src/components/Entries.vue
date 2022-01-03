@@ -10,7 +10,7 @@
       <div>
         <p>Összesen</p>
         <h3> {{ hoursSum }} </h3>
-        <p>óra</p>
+        <p>órát rögzítettél</p>
       </div>
 
       <div>
@@ -27,14 +27,17 @@
     </div>
     <div class="graphs-container">
       <div class="graph-container">
+        <h3>Melyik nap hány alkalommal rögzítettél órát</h3>
         <apexchart height="380" type="bar" :options="options1" :series="series1"></apexchart>
       </div>
 
       <div class="graph-container">
+        <h3>Melyik napra hány órát rögzítettél</h3>
         <apexchart height="380" type="bar" :options="options2" :series="series2"></apexchart>
       </div>
 
       <div class="graph-container">
+        <h3>Melyik projektre hány órát fordítottál</h3>
         <apexchart width="480" type="pie" :options="options3" :series="series3"></apexchart>
       </div>
     </div>
@@ -98,9 +101,6 @@ export default {
           show: false
         }
       },
-      title: {
-        text: 'Melyik nap hány alkalommal rögzítettél'
-      },
       xaxis: {
         categories: Object.keys(daysCounts.value)
       }
@@ -112,9 +112,6 @@ export default {
         toolbar: {
           show: false
         }
-      },
-      title: {
-        text: 'Melyik napra hány órát rögzítettél'
       },
       xaxis: {
         categories: Object.keys(daysCounts.value)
@@ -131,9 +128,6 @@ export default {
       },
       legend: {
         position: 'bottom'
-      },
-      title: {
-        text: 'Melyik projektre hány órát fordítottál'
       },
       labels: Object.keys(projectHours),
       responsive: [{
@@ -200,6 +194,7 @@ export default {
   }
 
   .entries-numbers {
+    max-width: 1600px;
     div {
       width: 277px;
       height: 120px;
@@ -214,12 +209,28 @@ export default {
 
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
   }
 
   .graphs-container {
+    max-width: 1600px;
     .graph-container {
+      height: 33rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+
+      h3 {
+        font-size: 1.5rem;
+        line-height: 1.75rem;
+        padding-block-start: 1rem;
+        padding-block-end: 2rem;
+        padding-inline: 1rem;
+      }
+
+      width: 460px;
       margin-block: 2rem;
       background-color: #FFFFFF;
       border-radius: 10px;
@@ -227,13 +238,14 @@ export default {
     }
 
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    flex-wrap: wrap;
     width: 100%;
-    height: 30rem;
+    
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1400px) {
   .entires-container {
     .entries-numbers {
       flex-direction: column;
@@ -241,6 +253,7 @@ export default {
       align-items: center;
 
       div {
+        width: 460px;
         margin-block-start: 1rem;
       }
     }
@@ -251,7 +264,7 @@ export default {
       align-items: center;
 
       .graph-container {
-        width: 480px;
+        width: 460px;
         padding-inline: 2rem;
         padding-block-start: 1.5rem;
       }
@@ -259,8 +272,27 @@ export default {
   }
 }
 
+@media screen and (max-width: 1600px) {
+  .entires-container {
+    .graphs-container {
+      justify-content: space-around;
+    }
+  }
+}
+
+
 @media screen and (max-width: 500px) {
   .entires-container {
+    .entries-numbers {
+      flex-direction: column;
+      height: 100%;
+      align-items: center;
+
+      div {
+        width: 320px
+      }
+    }
+
     .graphs-container {
       flex-direction: column;
       height: 100%;
