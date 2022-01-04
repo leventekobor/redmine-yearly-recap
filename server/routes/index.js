@@ -2,8 +2,16 @@ require('dotenv').config()
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const request = require('request')
-const routes = require('express').Router();
-const logger = require("../logger")
+const routes = require('express').Router()
+const logger = require("../logger") 
+import { Low, JSONFile } from 'lowdb'
+
+const file = '../feedback.json'
+const adapter = new JSONFile(file)
+const db = new Low(adapter)
+await db.read()
+
+const { feedback } = db.data
 
 const apicache = require('apicache')
 let cache = apicache.middleware
@@ -15,6 +23,16 @@ routes.get('/api/redmine_url', cache('5 minutes', onlyStatus200), async function
     res.send(process.env.BASE_URL)
 })
 
+routes.post('/api/feedback', jsonParser, async function(req, res) {
+    const feedback = feedbacks.push(req.body)
+    await db.write()
+    res.send(feedback)
+})
+
+routes.get('/api/feedback', jsonParser, async function(req, res) {
+
+})
+
 routes.post('/api/login', jsonParser, async function(req, res) {
     const baseUrlDomain = process.env.BASE_URL.split('://')[1]
 
@@ -22,6 +40,9 @@ routes.post('/api/login', jsonParser, async function(req, res) {
         if (!error && response.statusCode == 200) {
             logger.info("User successfully logged in")
             res.send(response.body)
+        } else {
+            res.statusCode = 401;
+            res.send('None shall pass');
         }
     })
 })
