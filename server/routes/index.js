@@ -16,11 +16,14 @@ const sequelize = new Sequelize({
 
 const Feedback = sequelize.define('Feedback', {
     feedback: {
-      type: DataTypes.STRING,
-      allowNull: true
+        type: DataTypes.STRING,
+        allowNull: true
     },
     like: {
-      type: DataTypes.STRING
+        type: DataTypes.STRING
+    },
+    user: {
+        type: DataTypes.STRING
     }
   }, {
 })
@@ -34,11 +37,22 @@ routes.get('/api/redmine_url', cache('5 minutes', onlyStatus200), async function
     res.send(process.env.BASE_URL)
 })
 
+routes.get('/api/feedback/:id', jsonParser, async function(req, res) {
+    console.log(req.params.id)
+    return await Feedback.findAll({
+        where: {
+            user: req.params.id
+        }}).then((data) => {
+            res.send(data[0]?.isNewRecord)
+        })
+})
+
 routes.post('/api/feedback', jsonParser, async function(req, res) {
-    return Feedback.create({
+    return await Feedback.create({
         feedback: req.body.feedback || '',
         like: req.body.like,
-    }, { fields: ['feedback', 'like'] }).then(function (feedback) {
+        user: req.body.user
+    }, { fields: ['feedback', 'like', 'user'] }).then(function (feedback) {
         if (feedback) {
             res.send(feedback);
         } else {
