@@ -32,7 +32,6 @@ export default {
         likes.value = (feedbacks.filter(i => i.like === 1)).length
         dislikes.value = feedbacks.length - likes.value
         texts.value = feedbacks.filter(i => i.feedback || i.feedback !== "")
-        console.log(texts.value)
     }))
 
     return {

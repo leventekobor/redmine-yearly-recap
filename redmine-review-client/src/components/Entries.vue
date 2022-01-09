@@ -174,7 +174,6 @@ export default {
 
     onMounted(() => {
       FeedbackService.checkFeedback(userId.value.slice(2, 10)).then((response) => {
-        console.log(response.data)
         if(response.data === false) {
           gaveFeedback.value = true
         }

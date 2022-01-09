@@ -20,61 +20,49 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import RedmineService from '@/services/RedmineService.js'
+import { ref, watch } from 'vue'
 
 export default {
   name: "Login",
   emits: ["userLoad"],
   setup(_,{ emit }) {
-    const apiKey = ref('')
     const username = ref('')
     const password = ref('')
     let user = ref('')
     let isActive = ref(false)
     let isPwd = ref(true)
-    let isPwdToken = ref(true)
+    let RedmineService
+
+    watch(username, (username) => {
+      if(username.length > 0 && typeof RedmineService === 'undefined') {
+        import('../services/RedmineService.js').then(val => {
+          RedmineService = val.default
+        })
+      }
+    })
     
     async function getUser() {
       try {
-        if(username.value && password.value) {
           let response = await RedmineService.getUserByPassword({
             "username": username.value, 
             "password": password.value 
           })
           user.value = response.data
           emit('userLoad', user);
-        } else {
-          const response = (await RedmineService.getUser(apiKey.value))
-          user.value = response.data
-          emit('userLoad', user);
-        }
       } catch (error) {
-          console.log(error)
           isActive.value = true
           setTimeout(() => isActive.value = false, 2000)
-          apiKey.value = ""
           username.value = ""
           password.value = ""
       }
     }
 
-    async function getAPILink() {
-      const response = await RedmineService.getRedmineUrl()
-      const apiKeyUrl = response.data + "/my/account"
-      window.open(apiKeyUrl)
-    }
-
     return {
-      user,
       isActive,
       getUser,
       username,
       password,
-      getAPILink,
-      apiKey,
       isPwd,
-      isPwdToken
     }
   }
 }

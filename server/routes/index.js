@@ -38,7 +38,6 @@ routes.get('/api/redmine_url', cache('5 minutes', onlyStatus200), async function
 })
 
 routes.get('/api/feedback/:id', jsonParser, async function(req, res) {
-    console.log(req.params.id)
     return await Feedback.findAll({
         where: {
             user: req.params.id

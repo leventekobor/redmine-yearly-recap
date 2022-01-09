@@ -21,8 +21,8 @@ export default {
 
     function userData(user) {
       import('./components/Dashboard.vue').then(val => {
-      Dashboard.value = val.default
-    })
+        Dashboard.value = val.default
+      })
       apiKey.value = user.value.user.api_key
     }
  
