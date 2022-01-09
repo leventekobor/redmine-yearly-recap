@@ -4,7 +4,7 @@
       <div>
         <p>Összesen</p>
         <h3> {{ timeEntries.length }} </h3>
-        <p>rögzítés</p>
+        <p>alkalommal rögzítettél időt</p>
       </div>
 
       <div>
@@ -16,52 +16,64 @@
       <div>
         <p>Átlagosan</p>
         <h3> {{ (hoursSum / timeEntries.length).toFixed(2) }} </h3>
-        <p>óra/jegy</p>
+        <p>órát rögzítettél egy jegyre</p>
       </div>
 
       <div>
-        <p>A {{ maxProject[0] }} projectre összesen </p>
+        <p>A legnépszerűbb projektedre</p>
         <h3> {{ maxProject[1] }} </h3>
         <p>órát rögzítettél</p>
       </div>
     </div>
     <div class="graphs-container">
       <div class="graph-container">
-        <h3>Melyik nap hány alkalommal rögzítettél órát</h3>
+        <h3>Megmutatja, hogy melyik nap hány különböző jegyre rögzítettél órát</h3>
         <apexchart height="380" type="bar" :options="options1" :series="series1"></apexchart>
       </div>
 
       <div class="graph-container">
-        <h3>Melyik napra hány órát rögzítettél</h3>
+        <h3>Megmutatja, hogy melyik napra hány órát rögzítettél</h3>
         <apexchart height="380" type="bar" :options="options2" :series="series2"></apexchart>
       </div>
 
       <div class="graph-container">
-        <h3>Melyik projektre hány órát fordítottál</h3>
+        <h3>Megmutatja, hogy melyik projektre hány órát fordítottál</h3>
         <apexchart width="480" type="pie" :options="options3" :series="series3"></apexchart>
+      </div>
+
+      <div class="graph-container">
+        <Feedback @feedbackRecived="reciveFeedback" v-if="!gaveFeedback" :userId="userId"></Feedback>
+        <Feedbacks v-if="gaveFeedback"></Feedbacks>
       </div>
     </div>
   </article>
 </template>
 
 <script>
-import { ref } from 'vue'
-import VueApexCharts from "vue3-apexcharts";
+import { ref, onMounted } from 'vue'
+import VueApexCharts from "vue3-apexcharts"
+import Feedback from "@/components/Feedback"
+import Feedbacks from '@/components/Feedbacks'
+import FeedbackService from '@/services/FeedbackService.js'
 
 export default {
   name: 'Entries',
   components: {
     apexchart: VueApexCharts,
+    Feedback,
+    Feedbacks
   },
   props: {
-    entries: Array
+    entries: Array,
+    userApiKey: String
   },
   setup(props) {
-    let timeEntries = ref(props.entries)
-    let daysCounts = ref()
-    let daysCountHours = ref()
-    let maxProject = ref()
-    console.log(timeEntries)
+    const timeEntries = ref(props.entries)
+    const userId = ref(props.userApiKey)
+    const daysCounts = ref()
+    const daysCountHours = ref()
+    const maxProject = ref()
+    const gaveFeedback = ref(false)
 
     function aggregateData(array) {
       const result = array.reduce((acc, value) => ({
@@ -70,6 +82,10 @@ export default {
       }), {})
 
       return result
+    }
+
+    function reciveFeedback(indicator) {
+      gaveFeedback.value = indicator
     }
 
     const hoursSum = ref(timeEntries.value.reduce((acc, obj) => {
@@ -156,6 +172,16 @@ export default {
 
     let series3 = ref(Object.values(projectHours))
 
+    onMounted(() => {
+      FeedbackService.checkFeedback(userId.value.slice(2, 10)).then((response) => {
+        console.log(response.data)
+        if(response.data === false) {
+          gaveFeedback.value = true
+        }
+        // false if user already gave feedback
+      })
+    })
+
     return {
       timeEntries,
       hoursSum,
@@ -168,7 +194,10 @@ export default {
       series1,
       series2,
       series3,
-      daysCountHours
+      daysCountHours,
+      gaveFeedback,
+      reciveFeedback,
+      userId
     }
   }
 }
@@ -194,7 +223,7 @@ export default {
   }
 
   .entries-numbers {
-    max-width: 1600px;
+    max-width: 1400px;
     div {
       width: 277px;
       height: 120px;
@@ -214,7 +243,8 @@ export default {
   }
 
   .graphs-container {
-    max-width: 1600px;
+    max-width: 1400px;
+    
     .graph-container {
       height: 33rem;
       display: flex;
@@ -223,14 +253,14 @@ export default {
       align-items: center;
 
       h3 {
-        font-size: 1.5rem;
-        line-height: 1.75rem;
+        font-size: 1.05rem;
+        line-height: 1.25rem;
         padding-block-start: 1rem;
         padding-block-end: 2rem;
         padding-inline: 1rem;
       }
 
-      width: 460px;
+      width: 600px;
       margin-block: 2rem;
       background-color: #FFFFFF;
       border-radius: 10px;
@@ -239,6 +269,7 @@ export default {
 
     display: flex;
     justify-content: space-between;
+    align-content: center;
     flex-wrap: wrap;
     width: 100%;
     
@@ -246,6 +277,17 @@ export default {
 }
 
 @media screen and (max-width: 1400px) {
+  .entires-container {
+    .graphs-container {
+      .graph-container {
+        width: 542px;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 1200px) {
   .entires-container {
     .entries-numbers {
       flex-direction: column;
@@ -271,15 +313,6 @@ export default {
     }
   }
 }
-
-@media screen and (max-width: 1600px) {
-  .entires-container {
-    .graphs-container {
-      justify-content: space-around;
-    }
-  }
-}
-
 
 @media screen and (max-width: 500px) {
   .entires-container {

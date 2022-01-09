@@ -1,14 +1,14 @@
 <template>
   <section class="dashboard">
-    <h1>A 2021-es éved Redmine összefoglalója</h1>
+    <h1>A 2021-es éved Redmine összefoglód</h1>
     <article v-if="loading" class="loading-container">
       <label class="loading-text">
-        Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel, ez a folyamat akár perceking is eltarthat.🍻
+        Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel, ez a folyamat akár percekig is eltarthat.🍻
         <progress id="data-loading" :max="totalData " :value="collectedData" />
       </label>
     </article>
     <article class="data-container">
-      <Entries v-if="!loading && entries" :entries="entries" >
+      <Entries v-if="!loading && entries" :entries="entries" :userApiKey="userApiKey">
       </Entries>
     </article>
   </section>
@@ -92,6 +92,7 @@ export default {
     line-height: 2.25rem;
     margin-block-start: 0rem;
     font-weight: 500;
+    text-align: center;
   } 
 
   .loading-container {

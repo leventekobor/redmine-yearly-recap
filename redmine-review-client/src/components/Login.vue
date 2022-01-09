@@ -1,10 +1,10 @@
 <template>
   <section class="login-container">
     <img :src='require(`../../public/tigra.png`)'>
-    <h2>Redmine Yearly Recap Login</h2>
+    <h2>Redmine 2021 Összefoglaló</h2>
     <form @submit.prevent="getUser" class="form-control">
-      <q-input outlined v-model="username" id="username" name="username" type="text" label="Username" autocomplete="username"></q-input>
-      <q-input outlined v-model="password" id="password" name="password" :type="isPwd ? 'password' : 'text'" autocomplete="new-password" label="Password">
+      <q-input outlined v-model="username" id="username" name="username" type="text" label="Felhasználónév" autocomplete="username"></q-input>
+      <q-input outlined v-model="password" id="password" name="password" :type="isPwd ? 'password' : 'text'" autocomplete="new-password" label="Jelszó">
         <template v-slot:append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -13,10 +13,10 @@
           />
         </template>
       </q-input>
-      <button class="action">LOG IN</button>
+      <button class="action">Bejelentkezés</button>
     </form>
   </section>
-  <div v-bind:class="{ active: isActive }" class="toast" id="errorToast">Login falid</div>
+  <div v-bind:class="{ active: isActive }" class="toast" id="errorToast">Bejelentkezés sikertelen</div>
 </template>
 
 <script>

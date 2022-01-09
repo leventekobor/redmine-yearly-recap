@@ -1,32 +1,35 @@
 <template>
   <Login v-if="!apiKey" @userLoad="userData" />
-  <Dashboard  v-else :apiKey="apiKey">
-  </Dashboard>
+  <component :is="Dashboard" v-else :apiKey="apiKey">
+  </component>
 </template>
 
 <script>
 import Login from './components/Login.vue'
-import Dashboard from './components/Dashboard.vue'
 
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
  
 export default {
   name: 'app',
   components: {
-    Login,
-    Dashboard
+    Login
   },
 
   setup () {
-    let apiKey = ref()
+    const apiKey = ref()
+    let Dashboard = shallowRef('')
 
     function userData(user) {
+      import('./components/Dashboard.vue').then(val => {
+      Dashboard.value = val.default
+    })
       apiKey.value = user.value.user.api_key
     }
  
     return {
       apiKey,
-      userData
+      userData,
+      Dashboard
     }
   }
 }
