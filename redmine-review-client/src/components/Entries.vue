@@ -110,6 +110,7 @@ export default {
 
     maxProject.value = Object.entries(projectHours).sort((x,y)=>y[1]-x[1])[0]
 
+    let daysOfWeek = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
     let options1 = ref({
       chart: {
         id: 'data',
@@ -118,7 +119,7 @@ export default {
         }
       },
       xaxis: {
-        categories: Object.keys(daysCounts.value)
+        categories: daysOfWeek
       }
     })
 
@@ -130,7 +131,7 @@ export default {
         }
       },
       xaxis: {
-        categories: Object.keys(daysCounts.value)
+        categories: daysOfWeek
       }
     })
 
@@ -162,12 +163,12 @@ export default {
 
     let series1 = ref([{
       name: 'rogzitett-orak',
-      data: Object.values(daysCounts.value)
+      data: daysOfWeek.map(x => daysCounts.value[x])
     }])
 
     let series2 = ref([{
       name: 'rogzitett-orak',
-      data: Object.values(dayHours)
+      data: daysOfWeek.map(x => dayHours[x])
     }])
 
     let series3 = ref(Object.values(projectHours))
