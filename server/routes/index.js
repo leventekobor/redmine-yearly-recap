@@ -79,7 +79,7 @@ routes.post('/api/login', jsonParser, async function(req, res) {
     const baseUrlDomain = process.env.BASE_URL.split('://')[1]
 
     request(`https://${req.body.username}:${req.body.password}@${baseUrlDomain}users/current.json`, function (error, response, body) {
-        if (!error && response.statusCode == 200) {  // FIXME: === kéne inkább?
+        if (!error && response.statusCode === 200) {
             res.send(response.body)
         } else {
             res.statusCode = 401;
@@ -89,14 +89,7 @@ routes.post('/api/login', jsonParser, async function(req, res) {
 })
 
 routes.use('/api', cache('5 minutes', onlyStatus200), async function(req, res) {
-    let startTime = new Date() // FIXME: mire való?
     req.pipe(request(process.env.BASE_URL + req.url)).pipe(res);
-    let endTime = new Date()
-})
-
-// TODO: védi valami a cache-t, hogy ne lehessen adatbányászni?
-routes.get('/cache/index', async function (req, res) {
-    res.json(apicache.getIndex())
 })
 
 module.exports = routes;
