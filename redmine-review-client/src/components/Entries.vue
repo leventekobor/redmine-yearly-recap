@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import {onMounted, ref} from 'vue'
 import VueApexCharts from "vue3-apexcharts"
 import Feedback from "@/components/Feedback"
 import Feedbacks from '@/components/Feedbacks'
@@ -94,12 +94,10 @@ export default {
 
 
     function aggregateData(array) {
-      const result = array.reduce((acc, value) => ({
+      return array.reduce((acc, value) => ({
         ...acc,
         [value]: (acc[value] || 0) + 1
       }), {})
-
-      return result
     }
 
     const timeEntriesDays = aggregateData(timeEntries.value.map(entrie => entrie.spent_on))
@@ -116,11 +114,6 @@ export default {
     let daysOfWeek = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
     let finalAvgDayEntri = daysOfWeek.map(entri => (magic[entri] / magic1[entri]).toFixed(2))
 
-
-
-    console.log(magic1)
-    console.log(finalAvgDayEntri)
-
     let days = timeEntries.value.map(entrie => new Date(entrie.spent_on).toLocaleString('hu-HU', {weekday:'long'}))
     daysCounts.value = aggregateData(days)
 
@@ -129,7 +122,11 @@ export default {
       return r;
     }, {});
 
-  
+    let hoursPerDate = timeEntries.value.reduce((r,v) => {
+      r[v.spent_on] = (r[v.spent_on] || 0) + v.hours;
+      return r;
+    }, {});
+
     let projectHours = timeEntries.value.reduce((r,v) => {
       r[v.project.name] = (r[v.project.name] || 0) + v.hours; 
       return r;
@@ -143,10 +140,10 @@ export default {
     }
 
     function generateDataOK(entries, month) {
-      var i = 1;
-      var series = [];
+      let series = [];
+      let i = 1;
       while (i < 32) {
-        var day = '2021-' + pad(month) + '-' + pad(i)
+        let day = process.env.VUE_APP_YEAR + '-' + pad(month) + '-' + pad(i)
         series.push({x:i, y:entries[day] || 0})
         i++;
       }
@@ -155,52 +152,52 @@ export default {
 
     let series2b = [
       {
-        name: "Jan",
-        data: generateDataOK(timeEntriesDays, '01')
-      },
-      {
-        name: "Feb",
-        data: generateDataOK(timeEntriesDays, '02')
-      },
-      {
-        name: "Már",
-        data: generateDataOK(timeEntriesDays, '03')
-      },
-      {
-        name: "Ápr",
-        data: generateDataOK(timeEntriesDays, '04')
-      },
-      {
-        name: "Máj",
-        data: generateDataOK(timeEntriesDays, '05')
-      },
-      {
-        name: "Jún",
-        data: generateDataOK(timeEntriesDays, '06')
-      },
-      {
-        name: "Júl",
-        data: generateDataOK(timeEntriesDays, '07')
-      },
-      {
-        name: "Aug",
-        data: generateDataOK(timeEntriesDays, '08')
-      },
-      {
-        name: "Szep",
-        data: generateDataOK(timeEntriesDays, '09')
-      },
-      {
-        name: "Okt",
-        data: generateDataOK(timeEntriesDays, '10')
+        name: "Dec",
+        data: generateDataOK(hoursPerDate, '12')
       },
       {
         name: "Nov",
-        data: generateDataOK(timeEntriesDays, '11')
+        data: generateDataOK(hoursPerDate, '11')
       },
       {
-        name: "Dec",
-        data: generateDataOK(timeEntriesDays, '12')
+        name: "Okt",
+        data: generateDataOK(hoursPerDate, '10')
+      },
+      {
+        name: "Szep",
+        data: generateDataOK(hoursPerDate, '09')
+      },
+      {
+        name: "Aug",
+        data: generateDataOK(hoursPerDate, '08')
+      },
+      {
+        name: "Júl",
+        data: generateDataOK(hoursPerDate, '07')
+      },
+      {
+        name: "Jún",
+        data: generateDataOK(hoursPerDate, '06')
+      },
+      {
+        name: "Máj",
+        data: generateDataOK(hoursPerDate, '05')
+      },
+      {
+        name: "Ápr",
+        data: generateDataOK(hoursPerDate, '04')
+      },
+      {
+        name: "Már",
+        data: generateDataOK(hoursPerDate, '03')
+      },
+      {
+        name: "Feb",
+        data: generateDataOK(hoursPerDate, '02')
+      },
+      {
+        name: "Jan",
+        data: generateDataOK(hoursPerDate, '01')
       }
     ]
 
