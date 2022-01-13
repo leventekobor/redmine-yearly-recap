@@ -162,7 +162,7 @@ export default {
     })
 
     let series1 = ref([{
-      name: 'rogzitett-orak',
+      name: 'rogzites-darab',
       data: daysOfWeek.map(x => daysCounts.value[x])
     }])
 
