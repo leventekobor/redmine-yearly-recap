@@ -2,8 +2,8 @@
   <h3>Olvasd el, hogy mások mit írtak</h3>
   <article>
     <div class="likes-container">
-      <p>👍 Összesen {{ likes }} tetszik az alkalmazás</p>
-      <p>👎 Összesen {{ dislikes }} nem tetszik az alkalmazás</p>
+      <p>👍 Összesen {{ likes }} ember kedveli az alkalmazást</p>
+      <p>👎 {{ dislikes }} embernek viszont nem tetszik</p>
     </div>
     <div class="texts-container">
       <ul>

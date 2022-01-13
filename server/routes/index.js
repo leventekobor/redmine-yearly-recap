@@ -33,6 +33,9 @@ let cache = apicache.middleware
 
 const onlyStatus200 = (req, res) => res.statusCode === 200
 
+// TODO: nem lenne jó kiemelni a Handler-eket típus szerint külön fájlba?
+
+// FIXME: docs
 routes.get('/api/redmine_url', cache('5 minutes', onlyStatus200), async function(req, res) {
     res.send(process.env.BASE_URL)
 })
@@ -67,7 +70,7 @@ routes.get('/api/feedback', jsonParser, async function(req, res) {
     .catch(err => {
         res.status(500).send({
             message:
-            err.message || "Some error occurred while retrieving tutorials."
+            err.message || "Some error occurred while retrieving feedback records."
         })
     })
 })
@@ -76,7 +79,7 @@ routes.post('/api/login', jsonParser, async function(req, res) {
     const baseUrlDomain = process.env.BASE_URL.split('://')[1]
 
     request(`https://${req.body.username}:${req.body.password}@${baseUrlDomain}users/current.json`, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+        if (!error && response.statusCode == 200) {  // FIXME: === kéne inkább?
             res.send(response.body)
         } else {
             res.statusCode = 401;
@@ -86,11 +89,12 @@ routes.post('/api/login', jsonParser, async function(req, res) {
 })
 
 routes.use('/api', cache('5 minutes', onlyStatus200), async function(req, res) {
-    let startTime = new Date()
+    let startTime = new Date() // FIXME: mire való?
     req.pipe(request(process.env.BASE_URL + req.url)).pipe(res);
     let endTime = new Date()
 })
-  
+
+// TODO: védi valami a cache-t, hogy ne lehessen adatbányászni?
 routes.get('/cache/index', async function (req, res) {
     res.json(apicache.getIndex())
 })

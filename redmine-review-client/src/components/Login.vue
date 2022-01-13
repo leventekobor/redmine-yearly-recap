@@ -1,9 +1,9 @@
 <template>
   <section class="login-container">
-    <img :src='require(`../../public/tigra.png`)'>
+    <img :src='require(`../../public/tigra.png`)'/>
     <h2>Redmine 2021 Összefoglaló</h2>
     <form @submit.prevent="getUser" class="form-control">
-      <q-input outlined v-model="username" id="username" name="username" type="text" label="Felhasználónév" autocomplete="username"></q-input>
+      <q-input outlined v-model="username" id="username" name="username" type="text" label="Felhasználónév" autocomplete="username"/>
       <q-input outlined v-model="password" id="password" name="password" :type="isPwd ? 'password' : 'text'" autocomplete="new-password" label="Jelszó">
         <template v-slot:append>
           <q-icon

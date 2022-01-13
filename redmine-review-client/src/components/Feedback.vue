@@ -4,7 +4,7 @@
     <q-input
       v-model="text"
       outlined
-      label="Visszajelzés"
+      label="Viharjelzés"
       type="textarea"
       color="green"
       required

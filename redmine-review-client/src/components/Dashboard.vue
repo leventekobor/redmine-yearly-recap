@@ -1,9 +1,9 @@
 <template>
   <section class="dashboard">
-    <h1>A 2021-es éved Redmine összefoglód</h1>
+    <h1>A 2021-es éves Redmine összefoglalód</h1>
     <article v-if="loading" class="loading-container">
       <label class="loading-text">
-        Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ról. Kérlek legyél türelemmel, ez a folyamat akár percekig is eltarthat.🍻
+        Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ból. Kérlek, légy türelemmel! Ez a folyamat akár percekig is eltarthat.🍻
         <progress id="data-loading" :max="totalData " :value="collectedData" />
       </label>
     </article>

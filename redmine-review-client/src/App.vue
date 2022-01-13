@@ -1,14 +1,13 @@
 <template>
   <Login v-if="!apiKey" @userLoad="userData" />
-  <component :is="Dashboard" v-else :apiKey="apiKey">
-  </component>
+  <component :is="Dashboard" v-else :apiKey="apiKey"/>
 </template>
 
 <script>
 import Login from './components/Login.vue'
 
 import { ref, shallowRef } from 'vue'
- 
+
 export default {
   name: 'app',
   components: {
