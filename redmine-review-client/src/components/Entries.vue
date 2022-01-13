@@ -75,14 +75,7 @@ export default {
     const maxProject = ref()
     const gaveFeedback = ref(false)
 
-    function aggregateData(array) {
-      const result = array.reduce((acc, value) => ({
-        ...acc,
-        [value]: (acc[value] || 0) + 1
-      }), {})
 
-      return result
-    }
 
     function reciveFeedback(indicator) {
       gaveFeedback.value = indicator
@@ -93,6 +86,40 @@ export default {
     }, 0))
 
     const maxHour = ref(Math.max(...timeEntries.value.map(o => o.hours), 0))
+
+
+    function createWeekDayFromDateString(date) {
+      return new Date(date).toLocaleString('hu-HU', {weekday:'long'})
+    }
+
+
+    function aggregateData(array) {
+      const result = array.reduce((acc, value) => ({
+        ...acc,
+        [value]: (acc[value] || 0) + 1
+      }), {})
+
+      return result
+    }
+
+    const timeEntriesDays = aggregateData(timeEntries.value.map(entrie => entrie.spent_on))
+    const magic = Object.entries(timeEntriesDays).reduce((acc, value) => ({
+        ...acc,
+        [createWeekDayFromDateString(value[0])]: (acc[createWeekDayFromDateString(value[0])] || 0) + value[1]
+      }), {})
+
+    const magic1 = Object.entries(timeEntriesDays).reduce((acc, value) => ({
+        ...acc,
+        [createWeekDayFromDateString(value[0])]: (acc[createWeekDayFromDateString(value[0])] || 0) + 1
+      }), {})
+
+    let daysOfWeek = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
+    let finalAvgDayEntri = daysOfWeek.map(entri => (magic[entri] / magic1[entri]).toFixed(2))
+
+
+
+    console.log(magic1)
+    console.log(finalAvgDayEntri)
 
     let days = timeEntries.value.map(entrie => new Date(entrie.spent_on).toLocaleString('hu-HU', {weekday:'long'}))
     daysCounts.value = aggregateData(days)
@@ -110,7 +137,6 @@ export default {
 
     maxProject.value = Object.entries(projectHours).sort((x,y)=>y[1]-x[1])[0]
 
-    let daysOfWeek = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
     let options1 = ref({
       chart: {
         id: 'data',
@@ -163,7 +189,7 @@ export default {
 
     let series1 = ref([{
       name: 'rogzites-darab',
-      data: daysOfWeek.map(x => daysCounts.value[x])
+      data: finalAvgDayEntri
     }])
 
     let series2 = ref([{
