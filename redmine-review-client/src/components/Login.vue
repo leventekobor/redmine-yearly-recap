@@ -1,7 +1,7 @@
 <template>
   <section class="login-container">
     <img :src='require(`../../public/tigra.png`)'/>
-    <h2>Redmine 2021 Összefoglaló</h2>
+    <h2>Redmine {{ year }} Összefoglaló</h2>
     <form @submit.prevent="getUser" class="form-control">
       <q-input outlined v-model="username" id="username" name="username" type="text" label="Felhasználónév" autocomplete="username"/>
       <q-input outlined v-model="password" id="password" name="password" :type="isPwd ? 'password' : 'text'" autocomplete="new-password" label="Jelszó">
@@ -32,6 +32,7 @@ export default {
     let isActive = ref(false)
     let isPwd = ref(true)
     let RedmineService
+    let year = process.env.VUE_APP_YEAR
 
     watch(username, (username) => {
       if(username.length > 0 && typeof RedmineService === 'undefined') {
@@ -63,6 +64,7 @@ export default {
       username,
       password,
       isPwd,
+      year
     }
   }
 }

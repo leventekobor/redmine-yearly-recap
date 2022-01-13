@@ -1,6 +1,5 @@
 import Api from '@/services/Api'
 
-// TODO: beégetett dátumok kivezetése `.env`-be
 export default {
   getUser(apiKey) {
     return Api().get("users/current.json",
@@ -11,11 +10,11 @@ export default {
         this.getConfigWithApiKey(apiKey))
   },
   getAllUpdatedIssues(apiKey, offset) {
-    return Api().get(`issues.json?updated_by=me&updated_on=><2021-01-01|2021-12-31&limit=100&status_id=*&offset=${offset}`,
+    return Api().get(`issues.json?updated_by=me&updated_on=><${process.env.VUE_APP_YEAR}-01-01|${process.env.VUE_APP_YEAR}-12-31&limit=100&status_id=*&offset=${offset}`,
         this.getConfigWithApiKey(apiKey))
   },
   getAllTimeEntries(apiKey, offset) {
-    return Api().get(`time_entries.json?user_id=me&limit=100&from=2021-01-01&to=2021-12-31&offset=${offset}`,
+    return Api().get(`time_entries.json?user_id=me&limit=100&from=${process.env.VUE_APP_YEAR}-01-01&to=${process.env.VUE_APP_YEAR}-12-31&offset=${offset}`,
         this.getConfigWithApiKey(apiKey))
   },
   getRedmineUrl() {
