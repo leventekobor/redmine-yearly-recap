@@ -33,7 +33,7 @@
 
       <div class="graph-container">
         <h3>Megmutatja, hogy melyik napra hány órát rögzítettél</h3>
-        <apexchart height="380" type="bar" :options="options2" :series="series2"></apexchart>
+        <apexchart height="380" type="heatmap" :options="options2b" :series="series2b"></apexchart>
       </div>
 
       <div class="graph-container">
@@ -135,6 +135,75 @@ export default {
       return r;
     }, {});
 
+    // HEATMAP
+    function pad(num) {
+      num = num.toString();
+      if (num.length < 2) num = "0" + num;
+      return num;
+    }
+
+    function generateDataOK(entries, month) {
+      var i = 1;
+      var series = [];
+      while (i < 32) {
+        var day = '2021-' + pad(month) + '-' + pad(i)
+        series.push({x:i, y:entries[day] || 0})
+        i++;
+      }
+      return series;
+    }
+
+    let series2b = [
+      {
+        name: "Jan",
+        data: generateDataOK(timeEntriesDays, '01')
+      },
+      {
+        name: "Feb",
+        data: generateDataOK(timeEntriesDays, '02')
+      },
+      {
+        name: "Már",
+        data: generateDataOK(timeEntriesDays, '03')
+      },
+      {
+        name: "Ápr",
+        data: generateDataOK(timeEntriesDays, '04')
+      },
+      {
+        name: "Máj",
+        data: generateDataOK(timeEntriesDays, '05')
+      },
+      {
+        name: "Jún",
+        data: generateDataOK(timeEntriesDays, '06')
+      },
+      {
+        name: "Júl",
+        data: generateDataOK(timeEntriesDays, '07')
+      },
+      {
+        name: "Aug",
+        data: generateDataOK(timeEntriesDays, '08')
+      },
+      {
+        name: "Szep",
+        data: generateDataOK(timeEntriesDays, '09')
+      },
+      {
+        name: "Okt",
+        data: generateDataOK(timeEntriesDays, '10')
+      },
+      {
+        name: "Nov",
+        data: generateDataOK(timeEntriesDays, '11')
+      },
+      {
+        name: "Dec",
+        data: generateDataOK(timeEntriesDays, '12')
+      }
+    ]
+
     maxProject.value = Object.entries(projectHours).sort((x,y)=>y[1]-x[1])[0]
 
     let options1 = ref({
@@ -161,7 +230,61 @@ export default {
       }
     })
 
-    
+    let options2b = ref({
+      chart: {
+        id: 'data',
+        toolbar: {
+          show: false
+        }
+      },
+      plotOptions: {
+        heatmap: {
+          shadeIntensity: 0.5,
+          colorScale: {
+            ranges: [
+              {
+                from: 0,
+                to: 0,
+                name: "nincs",
+                color: "#FFFFFF"
+              },
+              {
+                from: 0.1,
+                to: 3,
+                name: "alig",
+                color: "#60afde"
+              },
+              {
+                from: 3.1,
+                to: 6,
+                name: "kevés",
+                color: "#128FD9"
+              },
+              {
+                from: 6.1,
+                to: 8,
+                name: "OK",
+                color: "#00A100"
+              },
+              {
+                from: 8.1,
+                to: 10,
+                name: "sok",
+                color: "#FFB200"
+              },
+              {
+                from: 10.1,
+                to: 100,
+                name: "extRÉM",
+                color: "#FF0000"
+              }
+            ]
+          }
+        }
+      }
+    })
+
+
     let options3 = ref({
       chart: {
         type: 'pie',
@@ -216,9 +339,11 @@ export default {
       daysCounts,
       options1,
       options2,
+      options2b,
       options3,
       series1,
       series2,
+      series2b,
       series3,
       daysCountHours,
       gaveFeedback,
