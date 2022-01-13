@@ -1,6 +1,6 @@
 <template>
   <section class="dashboard">
-    <h1>A {{ year }}-es éves Redmine összefoglalód</h1>
+    <h1>A {{ year }}. évi Redmine összefoglalód</h1>
     <article v-if="loading" class="loading-container">
       <label class="loading-text">
         Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ból. Kérlek, légy türelemmel! Ez a folyamat akár percekig is eltarthat.🍻
