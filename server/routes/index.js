@@ -29,7 +29,9 @@ const Feedback = sequelize.define('Feedback', {
 })
   
 const apicache = require('apicache')
-let cache = apicache.middleware
+let cache = apicache.options({
+    appendKey: (req, res) => req.get('X-Redmine-API-Key').slice(4, 12)
+}).middleware
 
 const onlyStatus200 = (req, res) => res.statusCode === 200
 
