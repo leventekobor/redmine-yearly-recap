@@ -10,6 +10,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "kute.js": "^2.2.4",
     "quasar": "^2.0.0",
     "vue": "^3.0.0",
     "vue-axios": "^3.2.4",

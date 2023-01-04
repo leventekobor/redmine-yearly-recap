@@ -3,23 +3,31 @@ import store from '@/store';
 
 const routes = [
   {
-    path: '/',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "Login" */ '@/pages/Login.vue'),
+    path: "/",
+    name: "Login",
+    component: () => import(/* webpackChunkName: "Login" */ "@/pages/Login.vue")
   },
   {
-    path: '/review',
-    name: 'Review',
-    component: () => import(/* webpackChunkName: "ProjectPick" */ '@/pages/Review.vue'),
+    path: "/review",
+    name: "Review",
+    component: () =>
+      import(/* webpackChunkName: "Review" */ "@/pages/Review.vue"),
     meta: {
-      requiresAuth: true,
-    },
+      requiresAuth: true
+    }
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: () => import(/* webpackChunkName: "NotFound" */ '@/pages/NotFound.vue'),
+    path: "/loading",
+    name: "Loading",
+    component: () =>
+      import(/* webpackChunkName: "Review" */ "@/pages/Loading.vue"),
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () =>
+      import(/* webpackChunkName: "NotFound" */ "@/pages/NotFound.vue")
+  }
 ];
 
 const router = createRouter({

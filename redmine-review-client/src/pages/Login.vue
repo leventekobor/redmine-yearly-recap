@@ -91,7 +91,7 @@
 import { ref } from 'vue';
 import RedmineService from '@/services/RedmineService';
 import { useRouter } from 'vue-router';
-import store from '@/store';
+import { useStore } from 'vuex';
 
 export default {
   name: 'Login',
@@ -104,6 +104,7 @@ export default {
     const isActive = ref(false);
     const isPwd = ref(true);
     const isApiKey = ref(true);
+    const store = useStore();
 
     function setActiveToFalse() {
       isActive.value = false;
