@@ -1,11 +1,11 @@
 <template>
-    <section class="dark">
+    <section class="dark container">
       <div class="spacer layer1">
         <Numbers />
       </div>
     </section>
     
-    <section class="red">
+    <section class="dark container">
       <div class="spacer layer2">
         <article>
         </article>
@@ -13,21 +13,21 @@
     </section>
     
 
-    <section class="dark">
+    <section class="dark container">
       <div class="spacer layer3">
         <article>
         </article>
       </div>
     </section>
 
-    <section class="dark">
+    <section class="dark container">
       <div class="spacer layer4">
         <article>
         </article>
       </div>
     </section>
 
-    <section class="dark">
+    <section class="dark container">
       <div class="spacer layer5">
         <article>
         </article>
@@ -51,7 +51,7 @@ export default {
     const totalData = ref(0)
     const collectedData = ref(0)
     let loading = ref(true)
-    let year = process.env.VUE_APP_YEAR
+    const year = process.env.VUE_APP_YEAR
     const store = useStore();
 
     async function _getEntriesWithOffset(offset=0) {
@@ -107,7 +107,7 @@ export default {
   overflow-x: hidden;
 }
 
-section {
+.container {
   position: relative;
   display: flex;
   flex-direction: column;

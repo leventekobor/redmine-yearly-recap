@@ -1,17 +1,29 @@
 <template>
-  <article>
-    <div>
-      <p>Összesen {{ store.state.issues.length }} alkalommal rögzítettél időt</p>
-    </div>
+  <section class="numbers-section">
+    <article class="heading">
+      <h2>{{ year }} Redmine összefoglaló</h2>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe reprehenderit ut deleniti molestias sequi consequuntur quibusdam beatae aliquam nemo. Eius saepe cumque sapiente impedit. Illo mollitia quos labore culpa dolores.</p>
+    </article>
+    <article class="cards-conatiner">
+      <div class="card">
+        <p>Összesen</p>
+        <p class="trophy"><b>{{ store.state.issues.length }}</b></p>
+        <p>alkalommal rögzítettél időt</p>
+      </div>
 
-    <div>
-      <p>Összesen {{ hoursSum }} órát rögzítettél</p>
-    </div>
+      <div class="card">
+        <p>Összesen</p>
+        <p class="trophy"><b>{{ hoursSum }}</b></p>
+        <p>órát rögzítettél</p>
+      </div>
 
-    <div>
-      <p>Átlagosan {{ (hoursSum/store.state.issues.length).toFixed(2) }} órát rögzítettél egy jegyre</p>
-    </div>
-  </article>
+      <div class="card">
+        <p>Átlagosan</p>
+        <p class="trophy"><b>{{ (hoursSum/store.state.issues.length).toFixed(2) }}</b></p>
+        <p>órát rögzítettél egy jegyre</p>
+      </div>
+    </article>
+  </section>
 </template>
 
 <script>
@@ -26,42 +38,79 @@ export default {
     const hoursSum = ref(store.state.issues.reduce((acc, obj) => {
       return acc + obj.hours
     }, 0))
+    const year = process.env.VUE_APP_YEAR
 
     return {
       store,
-      hoursSum
+      hoursSum,
+      year
     };
   },
 };
 </script>
 
 <style scoped>
-article {
+.numbers-section {
+  width: 100%;
+  height: 100%;
+  padding: 96px;
+}
+
+.heading-duplicate {
   backdrop-filter: blur(13px);
   background: rgba(255,255,255,0.65);
-  margin: 96px;
   padding: 24px;
   border-radius: 12px;
   width: 100%;
+  /* height: 100%; */
   overflow: hidden;
-  box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2);
+  box-shadow: 0 15px 25px rgb(129 124 124 / 20%);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
 }
 
-/* Card Hover Scale & Effect */
-
-#animated-cards .card:hover {
-  -webkit-transform: scale(1.2);
-  -moz-transform: scale(1.2);
-  -o-transform: scale(1.2);
-  -ms-transform: scale(1.2);
-  transform: scale(1.2);
-  transition: all 1200ms;
-  z-index: 99;
+.heading {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  color: white;
 }
 
-#animated-cards .card {
-  transition: all 1200ms;
-  height: 100%;
+.heading > h2 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.cards-conatiner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
+}
+
+.card {
+  width: 320px;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 12px;
+  backdrop-filter: blur(13px);
+  background: rgba(214, 214, 242, 0.75);
+  text-align: center;
+}
+
+.card > p {
+  font-size: 1.5rem;
+  margin: 0 0 10px;
+}
+
+.card > .trophy {
+  font-size: 3rem;
 }
 </style>
