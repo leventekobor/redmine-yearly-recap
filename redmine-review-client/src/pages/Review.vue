@@ -7,16 +7,14 @@
     
     <section class="dark container">
       <div class="spacer layer2">
-        <article>
-        </article>
+        <Projects />
       </div>
     </section>
     
 
     <section class="dark container">
       <div class="spacer layer3">
-        <article>
-        </article>
+        <Issues />
       </div>
     </section>
 
@@ -40,11 +38,15 @@ import { ref, onMounted } from 'vue'
 import RedmineService from '@/services/RedmineService.js'
 import { useStore } from 'vuex';
 import Numbers from '@/components/Numbers';
+import Projects from '@/components/Projects';
+import Issues from '@/components/Issues';
 
 export default {
   name: 'Review',
   components: {
-    Numbers
+    Numbers,
+    Projects,
+    Issues,
   },
   setup() {
     let entries = ref([])
