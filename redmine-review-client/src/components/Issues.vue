@@ -5,16 +5,16 @@
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe reprehenderit ut deleniti molestias sequi consequuntur quibusdam beatae aliquam nemo. Eius saepe cumque sapiente impedit. Illo mollitia quos labore culpa dolores.</p>
     </article>
     <article class="card">
-      <apexchart height="380" width="550" type="bar" :options="options" :series="series"></apexchart>
+      <apexchart height="380" width="600" type="bar" :options="options" :series="series"></apexchart>
     </article>
   </section>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
-import RedmineService from '@/services/RedmineService.js'
+import { ref, onMounted } from 'vue';
+import RedmineService from '@/services/RedmineService.js';
 import { useStore } from 'vuex';
-import VueApexCharts from "vue3-apexcharts"
+import VueApexCharts from "vue3-apexcharts";
 
 export default {
   name: 'Issues',
@@ -48,14 +48,7 @@ export default {
       b = days.indexOf(b);
       return a < b ? 0 : 1;
     };
-   
-    const magic1 = Object.entries(timeEntriesDays).reduce((acc, value) => ({
-      ...acc,
-      [createWeekDayFromDateString(value[0])]: (acc[createWeekDayFromDateString(value[0])] || 0) + 1
-    }), {})
-    
-    const finalAvgDayEntry = daysOfWeek.map(entri => (magic[entri] / magic1[entri]).toFixed(2))
-    console.log(Object.keys(magic))
+
     const options = ref({
       chart: {
         id: 'data',
@@ -69,7 +62,7 @@ export default {
     })
 
     const series = ref([{
-      name: 'rogzites darab',
+      name: 'rögzítés darab',
       data: Object.values(magic)
     }])
 

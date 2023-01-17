@@ -20,15 +20,13 @@
 
     <section class="dark container">
       <div class="spacer layer4">
-        <article>
-        </article>
+        <Days />
       </div>
     </section>
 
     <section class="dark container">
       <div class="spacer layer5">
-        <article>
-        </article>
+        <Feedback />
       </div>
     </section>
 </template>
@@ -40,6 +38,8 @@ import { useStore } from 'vuex';
 import Numbers from '@/components/Numbers';
 import Projects from '@/components/Projects';
 import Issues from '@/components/Issues';
+import Days from '@/components/Days';
+import Feedback from '@/components/Feedback';
 
 export default {
   name: 'Review',
@@ -47,6 +47,8 @@ export default {
     Numbers,
     Projects,
     Issues,
+    Days,
+    Feedback
   },
   setup() {
     let entries = ref([])
@@ -152,6 +154,7 @@ export default {
 }
 
 .layer5 {
+  align-items: center;
   background-image: url('../assets/layer5.svg');
 }
 </style>
