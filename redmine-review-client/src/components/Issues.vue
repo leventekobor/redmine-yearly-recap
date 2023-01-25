@@ -92,7 +92,7 @@ export default {
   padding-inline: 96px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   align-items: center;
 }
 
@@ -117,7 +117,7 @@ export default {
   border-radius: 12px;
   margin-top: 12px;
   backdrop-filter: blur(13px);
-  background: rgba(214, 214, 242, 0.85);
+  background: rgba(214, 214, 242, 0.95);
   text-align: center;
 }
 

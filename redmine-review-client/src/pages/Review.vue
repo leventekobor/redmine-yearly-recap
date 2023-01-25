@@ -13,7 +13,7 @@
       </div>
     </section>
   </div>
-  <div v-else>
+  <div v-else class="scroller">
       <section class="dark container">
       <div class="spacer layer1">
         <Numbers />
@@ -142,13 +142,12 @@ export default {
   border-radius: 12px;
   margin-top: 12px;
   backdrop-filter: blur(13px);
-  background: rgba(214, 214, 242, 0.85);
+  background: rgba(214, 214, 242, 0.95);
   text-align: center;
   height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 120px;
   justify-content: center;
 }
 
@@ -161,6 +160,17 @@ progress {
   align-items: center;
   justify-content: center;
   padding: 100px;
+  height: 120px;
+}
+
+.scroller {
+    height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+  }
+
+  .scroller section {
+    scroll-snap-align: start;
 }
 
 .review-container {
