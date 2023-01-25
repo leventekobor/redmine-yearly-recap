@@ -39,7 +39,7 @@ import { useStore } from 'vuex';
 
 export default {
   name: "Feedback",
-  setup() {
+  setup({ emit }) {
     const store = useStore();
     const liked = ref(1)
     const text = ref('')
@@ -54,8 +54,8 @@ export default {
         'like': liked.value,
         'user': id.slice(2, 10)
       }).then(() => {
+        emit('feedbackRecived', true)
         isActive.value = true
-        console.log(isActive);
         filled.value = true
         setTimeout(() => isActive.value = false, 2000)
       })

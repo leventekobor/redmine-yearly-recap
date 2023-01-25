@@ -26,7 +26,8 @@
 
     <section class="dark container">
       <div class="spacer layer5">
-        <Feedback />
+        <Feedback @feedbackRecived="reciveFeedback" v-if="!gaveFeedback" />
+        <Feedbacks v-if="gaveFeedback"></Feedbacks>
       </div>
     </section>
 </template>
@@ -39,7 +40,9 @@ import Numbers from '@/components/Numbers';
 import Projects from '@/components/Projects';
 import Issues from '@/components/Issues';
 import Days from '@/components/Days';
+import FeedbackService from '@/services/FeedbackService.js'
 import Feedback from '@/components/Feedback';
+import Feedbacks from '@/components/Feedbacks'
 
 export default {
   name: 'Review',
@@ -48,7 +51,8 @@ export default {
     Projects,
     Issues,
     Days,
-    Feedback
+    Feedback,
+    Feedbacks
   },
   setup() {
     let entries = ref([])
@@ -57,6 +61,9 @@ export default {
     let loading = ref(true)
     const year = process.env.VUE_APP_YEAR
     const store = useStore();
+    const gaveFeedback = ref(false)
+    const userId = ref(store.state.user.api_key);
+    console.log(userId)
 
     async function _getEntriesWithOffset(offset=0) {
       const response = await RedmineService.getAllTimeEntries(store.state.user.api_key, offset)
@@ -82,13 +89,23 @@ export default {
       }
     }
 
-    onMounted(() => {
+    function reciveFeedback(indicator) {
+      gaveFeedback.value = indicator
+    }
+
+    onMounted( async () => {
       getEntries().then(() => {
         store.commit({
           type: 'addAllIssues',
           payload: entries.value,
         })
         loading.value = false
+      }).then(() => {
+        FeedbackService.checkFeedback(userId.value.slice(2, 10)).then((response) => {
+          if(!response.data) {
+            gaveFeedback.value = true
+          }
+        })
       })
     })
 
@@ -97,7 +114,8 @@ export default {
       totalData,
       collectedData,
       loading,
-      entries
+      entries,
+      gaveFeedback
     };
   },
 };
