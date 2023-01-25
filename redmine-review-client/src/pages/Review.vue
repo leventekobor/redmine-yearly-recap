@@ -137,6 +137,12 @@ export default {
 </script>
 
 <style scoped>
+.loading-text {
+  font-size: 16px;
+  font-weight: 600;
+  padding-block-end: 12px;
+}
+
 .card {
   padding: 12px;
   border-radius: 12px;
@@ -152,7 +158,7 @@ export default {
 }
 
 progress {
-  width: 250px;
+  width: 300px;
 }
 
 .center-card {
