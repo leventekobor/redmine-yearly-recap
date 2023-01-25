@@ -1,5 +1,20 @@
 <template>
+  <div v-if="loading">
     <section class="dark container">
+      <div class="spacer layer1 center-card">
+        <article class="card">
+          <label class="loading-text">
+            Az alkalmazás most összegyűjti a kimutatáshoz szükséges adatokat a Redmine-ból. Kérlek, légy türelemmel! Ez a folyamat akár percekig is eltarthat.🍻
+            
+          </label>
+
+          <progress id="data-loading" :max="totalData " :value="collectedData" />
+        </article>
+      </div>
+    </section>
+  </div>
+  <div v-else>
+      <section class="dark container">
       <div class="spacer layer1">
         <Numbers />
       </div>
@@ -30,6 +45,7 @@
         <Feedbacks v-if="gaveFeedback"></Feedbacks>
       </div>
     </section>
+</div>
 </template>
 
 <script>
@@ -121,6 +137,32 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 12px;
+  backdrop-filter: blur(13px);
+  background: rgba(214, 214, 242, 0.85);
+  text-align: center;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 120px;
+  justify-content: center;
+}
+
+progress {
+  width: 250px;
+}
+
+.center-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px;
+}
+
 .review-container {
   margin: 0;
   color: white;
