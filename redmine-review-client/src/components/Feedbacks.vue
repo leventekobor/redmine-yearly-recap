@@ -34,8 +34,6 @@ export default {
       texts.value = feedbacks.filter(i => i.feedback || i.feedback !== "")
     }))
 
-    console.log(likes)
-
     return {
         likes,
         dislikes,
@@ -55,7 +53,7 @@ export default {
   background: rgba(214, 214, 242, 0.85);
   text-align: center;
   height: fit-content;
-  width: 600px;
+  width: 700px;
 }
 
 h3 {

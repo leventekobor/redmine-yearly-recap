@@ -46,7 +46,6 @@ export default {
     const isActive = ref(false)
     const filled = ref(false)
     const id = store.state.user.api_key;
-    //console.log(store.state.api_key);
     
     async function sendFeedback() {
       FeedbackService.sendFeedback({

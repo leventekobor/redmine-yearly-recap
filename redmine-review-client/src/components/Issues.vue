@@ -5,7 +5,7 @@
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe reprehenderit ut deleniti molestias sequi consequuntur quibusdam beatae aliquam nemo. Eius saepe cumque sapiente impedit. Illo mollitia quos labore culpa dolores.</p>
     </article>
     <article class="card">
-      <apexchart height="380" width="600" type="bar" :options="options" :series="series"></apexchart>
+      <apexchart height="380" width="700" type="bar" :options="options" :series="series"></apexchart>
     </article>
   </section>
 </template>
@@ -35,13 +35,22 @@ export default {
     function createWeekDayFromDateString(date) {
       return new Date(date).toLocaleString('hu-HU', {weekday:'long'})
     }
-
-    const daysOfWeek = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
+    
     const timeEntriesDays = aggregateData(store.state.issues.map(entrie => entrie.spent_on))
+
     const magic = Object.entries(timeEntriesDays).reduce((acc, value) => ({
       ...acc,
       [createWeekDayFromDateString(value[0])]: (acc[createWeekDayFromDateString(value[0])] || 0) + value[1]
     }), {})
+
+    const magic1 = Object.entries(timeEntriesDays).reduce((acc, value) => ({
+      ...acc,
+      [createWeekDayFromDateString(value[0])]: (acc[createWeekDayFromDateString(value[0])] || 0) + 1
+    }), {})
+
+    const daysOfWeek = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
+    let finalAvgDayEntri = daysOfWeek.map(entri => (magic[entri] / magic1[entri]).toFixed(2))
+   
 
     const sortDays = function (a, b) {
       a = days.indexOf(a);
@@ -62,8 +71,8 @@ export default {
     })
 
     const series = ref([{
-      name: 'rögzítés darab',
-      data: Object.values(magic)
+      name: 'rogzites-darab',
+      data: finalAvgDayEntri
     }])
 
     return {

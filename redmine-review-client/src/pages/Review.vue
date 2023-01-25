@@ -63,7 +63,6 @@ export default {
     const store = useStore();
     const gaveFeedback = ref(false)
     const userId = ref(store.state.user.api_key);
-    console.log(userId)
 
     async function _getEntriesWithOffset(offset=0) {
       const response = await RedmineService.getAllTimeEntries(store.state.user.api_key, offset)

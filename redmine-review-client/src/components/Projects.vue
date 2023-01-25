@@ -1,7 +1,7 @@
 <template>
   <section class="projects-section">
     <article class="card">
-      <apexchart height="380" width="600" type="bar" :options="options" :series="series"></apexchart>
+      <apexchart height="380" width="700" type="bar" :options="options" :series="series"></apexchart>
     </article>
     <article class="heading">
       <h2>Projekteid</h2>
