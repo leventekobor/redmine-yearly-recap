@@ -80,6 +80,11 @@ export default {
     const gaveFeedback = ref(false)
     const userId = ref(store.state.user.api_key);
 
+
+    function reciveFeedback(indicator) {
+      gaveFeedback.value = true;
+    }
+
     async function _getEntriesWithOffset(offset=0) {
       const response = await RedmineService.getAllTimeEntries(store.state.user.api_key, offset)
       collectedData.value += response?.data?.time_entries.length
@@ -104,10 +109,6 @@ export default {
       }
     }
 
-    function reciveFeedback(indicator) {
-      gaveFeedback.value = indicator
-    }
-
     onMounted( async () => {
       getEntries().then(() => {
         store.commit({
@@ -130,7 +131,8 @@ export default {
       collectedData,
       loading,
       entries,
-      gaveFeedback
+      gaveFeedback,
+      reciveFeedback
     };
   },
 };

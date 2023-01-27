@@ -39,7 +39,8 @@ import { useStore } from 'vuex';
 
 export default {
   name: "Feedback",
-  setup({ emit }) {
+  emits: ["feedbackRecived"],
+  setup(_, { emit }) {
     const store = useStore();
     const liked = ref(1)
     const text = ref('')

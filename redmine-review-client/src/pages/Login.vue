@@ -205,7 +205,7 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 600px;
+  width: 400px;
 }
 
 .separator {
@@ -313,6 +313,10 @@ div.input-container {
 }
 
 .login-page {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-image: url('../assets/login.svg');
   display: flex;
   justify-content: center;
   align-items: center;

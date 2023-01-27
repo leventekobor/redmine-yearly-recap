@@ -4,14 +4,14 @@ import createPersistedState from "vuex-persistedstate";
 function initialState() {
   return {
     user: {},
-    issues: []
+    issues: [],
   };
 }
 
 const store = createStore({
   state: {
     user: {},
-    issues: []
+    issues: [],
   },
   mutations: {
     addUser(state, payload) {
