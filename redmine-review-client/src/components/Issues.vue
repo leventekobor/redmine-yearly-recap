@@ -51,6 +51,7 @@ export default {
 
     const daysOfWeek = ['hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat', 'vasárnap'];
     let finalAvgDayEntri = daysOfWeek.map(entri => (magic[entri] / magic1[entri]).toFixed(2))
+    finalAvgDayEntri = finalAvgDayEntri.filter(i => i !== 'NaN')
    
 
     const sortDays = function (a, b) {
