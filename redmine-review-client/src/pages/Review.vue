@@ -251,7 +251,7 @@ progress {
 }
 
 .feedback-texts {
+  width: 700px;
   color: white;
-  padding-inline: 96px;
 }
 </style>

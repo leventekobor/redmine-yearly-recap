@@ -99,7 +99,7 @@ export default {
 }
 
 .heading {
-  width: 100%;
+  width: 700px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
