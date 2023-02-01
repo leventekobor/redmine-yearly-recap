@@ -75,7 +75,6 @@ export default {
 }
 
 .heading {
-  width: 700px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
