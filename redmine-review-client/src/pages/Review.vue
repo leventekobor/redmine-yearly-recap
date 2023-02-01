@@ -41,6 +41,10 @@
 
     <section class="dark container">
       <div class="spacer layer5">
+        <article class="feedback-texts">
+          <p class="text">"Gyengeségeidből okulhatsz a legtöbbet. És meglásd, többé nem fognak uralkodni rajtad. Ehelyett te fogod uralni azokat."</p>
+          <p class="author">Yoda</p>
+        </article>
         <Feedback @feedbackRecived="reciveFeedback" v-if="!gaveFeedback" />
         <Feedbacks v-if="gaveFeedback"></Feedbacks>
       </div>
@@ -204,14 +208,15 @@ progress {
 }
 
 .spacer {
-    width: 100%;
-    height: 100vh;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    align-content: center;
-    justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .layer1 {
@@ -233,5 +238,20 @@ progress {
 .layer5 {
   align-items: center;
   background-image: url('../assets/layer5.svg');
+}
+
+.text {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.author {
+  font-style: italic;
+}
+
+.feedback-texts {
+  color: white;
+  padding-inline: 96px;
 }
 </style>

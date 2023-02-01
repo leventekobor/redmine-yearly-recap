@@ -1,8 +1,9 @@
 <template>
   <section class="issues-section">
     <article class="heading">
-      <h2>Jegyek</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe reprehenderit ut deleniti molestias sequi consequuntur quibusdam beatae aliquam nemo. Eius saepe cumque sapiente impedit. Illo mollitia quos labore culpa dolores.</p>
+      <h4>Megmutatja, hogy melyik nap hány különböző jegyre rögzítettél órát</h4>
+      <p class="text">"Ne feledd! Amire figyelsz, az a világod."</p>
+      <p class="author">Qui-Gon Jinn</p>
     </article>
     <article class="card">
       <apexchart height="380" width="700" type="bar" :options="options" :series="series"></apexchart>
@@ -128,5 +129,15 @@ export default {
 
 .card > .trophy {
   font-size: 3rem;
+}
+
+.text {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.author {
+  font-style: italic;
 }
 </style>

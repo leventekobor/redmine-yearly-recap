@@ -2,7 +2,8 @@
   <section class="numbers-section">
     <article class="heading">
       <h2>{{ year }} Redmine összefoglaló</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe reprehenderit ut deleniti molestias sequi consequuntur quibusdam beatae aliquam nemo. Eius saepe cumque sapiente impedit. Illo mollitia quos labore culpa dolores.</p>
+      <p class="text">"Tedd, vagy ne tedd, de ne próbáld!"</p>
+      <p class="author">Yoda</p>
     </article>
     <article class="cards-conatiner">
       <div class="card">
@@ -112,5 +113,15 @@ export default {
 
 .card > .trophy {
   font-size: 3rem;
+}
+
+.text {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.author {
+  font-style: italic;
 }
 </style>

@@ -4,8 +4,9 @@
       <apexchart height="380" width="700" type="heatmap" :options="options" :series="series"></apexchart>
     </article>
     <article class="heading">
-      <h2>Napjaid</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe reprehenderit ut deleniti molestias sequi consequuntur quibusdam beatae aliquam nemo. Eius saepe cumque sapiente impedit. Illo mollitia quos labore culpa dolores.</p>
+      <h4>Megmutatja, hogy melyik napra hány órát rögzítettél</h4>
+      <p class="text">"Remélem is, parancsnok, az Ön érdekében. Az Uralkodó ugyanis nem oly elnéző mint én."</p>
+      <p class="author">Darth Vader</p>
     </article>
   </section>
 </template>
@@ -214,5 +215,15 @@ export default {
 
 .card > .trophy {
   font-size: 3rem;
+}
+
+.text {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.author {
+  font-style: italic;
 }
 </style>

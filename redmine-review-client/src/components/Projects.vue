@@ -4,8 +4,9 @@
       <apexchart height="380" width="700" type="bar" :options="options" :series="series"></apexchart>
     </article>
     <article class="heading">
-      <h2>Projekteid</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe reprehenderit ut deleniti molestias sequi consequuntur quibusdam beatae aliquam nemo. Eius saepe cumque sapiente impedit. Illo mollitia quos labore culpa dolores.</p>
+      <h4>Megmutatja, hogy melyik projektre hány órát fordítottál</h4>
+      <p class="text">"Mi ketten közös erővel véget vethetünk ennek a pusztító háborúskodásnak. És rendet teremtünk a galaxisban."</p>
+      <p class="author">Darth Vader</p>    
     </article>
   </section>
 </template>
@@ -126,4 +127,15 @@ export default {
 .card > .trophy {
   font-size: 3rem;
 }
+
+.text {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.author {
+  font-style: italic;
+}
+
 </style>
